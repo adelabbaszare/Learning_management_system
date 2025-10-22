@@ -3,4 +3,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-createApp(App).use(store).use(router).mount('#app')
+import axios from 'axios'
+import './assets/custom-bulma.scss'
+
+axios.defaults.baseURL = 'https://127.0.0.1:8000'
+
+createApp(App).use(store).use(router, axios).mount('#app')
