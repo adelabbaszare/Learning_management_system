@@ -1,39 +1,23 @@
 <template>
-  <nav class="navbar is-info" role="navigation" aria-label="main navigation" style="min-height: 5rem;">
-    <div class="navbar-brand">
-      <a class="navbar-item is-size-4" href="/">LearnwithAdel</a>
-    </div>
-
-    <div id="navbar-item" class="navbar-menu">
-      <div class="navbar-start">
-        <a href="/" class="navbar-item">Home</a>
-        <a href="/about" class="navbar-item">About</a>
-      </div>
-
-      <div class="navbar-end">
-        <div class="navbar-item">
-          <div class="buttons">
-            <a href="/sign-up" class="button is-primary"><strong>Sign Up</strong></a>
-            <a class="button is-light">Log in</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
+  <Nav/>
 
   <router-view/>
 
-  <footer class="footer">
-    <div class="content has-text-centered">
-      <p class="made-by">
-        Made with <span class="purple-heart">💜</span> by Adel
-      </p>
-      <p>
-        © 2025 <strong>LearnwithAdel</strong>. All rights reserved.
-      </p>
-    </div>
-  </footer>
+  <Footer/>
 </template>
+
+<script>
+  import Footer from './components/Footer.vue';
+  import Nav from '@/components/Nav.vue'
+  export default {
+    name: 'App',
+    components: {
+      Nav,
+      Footer
+    }
+  }
+</script>
+
 
 <style lang="scss">
 @import '../node_modules/bulma';
