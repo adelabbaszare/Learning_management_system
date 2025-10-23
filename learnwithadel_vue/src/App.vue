@@ -7,13 +7,26 @@
 </template>
 
 <script>
+  import axios from 'axios';
   import Footer from './components/Footer.vue';
   import Nav from '@/components/Nav.vue'
+
   export default {
     name: 'App',
     components: {
       Nav,
       Footer
+    },
+    beforeCreate() {
+      this.$store.commit('initializeStore')
+
+      const token = this.$store.state.user.token
+
+      if (token) {
+        axios.defaults.headers.common['Authorization'] = "Token " + token
+      } else {
+        axios.defaults.headers.common['Authorization'] = ""
+      }
     }
   }
 </script>
