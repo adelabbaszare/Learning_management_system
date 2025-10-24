@@ -1,41 +1,43 @@
 <template>
   <Nav/>
-
   <router-view/>
-
   <Footer/>
 </template>
 
 <script>
-  import axios from 'axios';
-  import Footer from './components/Footer.vue';
-  import Nav from '@/components/Nav.vue'
+import axios from 'axios';
+import Footer from './components/Footer.vue';
+import Nav from '@/components/Nav.vue';
 
-  export default {
-    name: 'App',
-    components: {
-      Nav,
-      Footer
-    },
-    beforeCreate() {
-      this.$store.commit('initializeStore')
+axios.defaults.baseURL = 'http://localhost:8000'
+export default {
+  name: 'App',
+  components: { Nav, Footer },
+  created() {
 
-      const token = this.$store.state.user.token
+    const apiUrl = process.env.VUE_APP_API_URL || 'http://localhost:8000';
 
-      if (token) {
-        axios.defaults.headers.common['Authorization'] = "Token " + token
-      } else {
-        axios.defaults.headers.common['Authorization'] = ""
-      }
+    axios.defaults.baseURL = apiUrl;
+
+    this.$store.commit('initializeStore');
+
+    const token = this.$store.state.user.token;
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = 'Token ' + token;
+    } else {
+
+      delete axios.defaults.headers.common['Authorization'];
     }
   }
+}
 </script>
+
 
 
 <style lang="scss">
 @import '../node_modules/bulma';
 
-// انیمیشن قلب بنفش
+
 @keyframes heartbeat {
   0%, 20%, 40%, 60%, 80%, 100% {
     transform: scale(1);

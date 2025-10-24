@@ -14,7 +14,7 @@
               <div class="field">
                 <label>Email</label>
                 <div class="control">
-                  <input type="email" class="input" v-model="username" />
+                  <input type="email" class="input" v-model="email" />
                 </div>
               </div>
 
@@ -32,13 +32,9 @@
                 </div>
               </div>
 
-
-            <div class="notification is-danger" v-if="errors.length">
-              <p v-for="error in errors" :key="error">
-                {{ error }}
-              </p>
-            </div>
-
+              <div class="notification is-danger" v-if="errors.length">
+                <p v-for="(error, idx) in errors" :key="idx">{{ error }}</p>
+              </div>
 
               <div class="field">
                 <div class="control">
@@ -62,53 +58,73 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      username: '',
+      email: '',
       password: '',
       password2: '',
       errors: []
     }
   },
   methods: {
-    submitForm() {
-      console.log('submitForm')
+    async submitForm() {
       this.errors = []
 
-      if (this.username === '') {
-        this.errors.push('The username is missing!')
+      if (!this.email) this.errors.push('The email is missing!')
+      if (!this.password) this.errors.push('The password is missing!')
+      if (this.password !== this.password2) this.errors.push('The Passwords are not matching!')
+
+      if (this.errors.length) return
+
+      const formData = {
+        username: this.email,
+        email: this.email,
+        password: this.password
       }
 
-      if (this.password === '') {
-        this.errors.push('The password is missing!')
-      }
+      try {
+        const regResp = await axios.post('/api/v1/users/', formData)
 
-            if (this.password !== this.password2) {
-        this.errors.push('The Passwords are not matching!')
-      }
+        const loginPayload = { username: this.email, password: this.password }
+        const loginResp = await axios.post('/api/v1/token/login/', loginPayload)
 
-      if (!this.errors.length){
-        const formData = {
-            username: this.username,
-            password: this.password
+        
+        const token = loginResp.data.auth_token || loginResp.data.token || loginResp.data.key
+        if (!token) {
+          this.errors.push('Login succeeded but server did not return a token.')
+          console.error('Login response:', loginResp.data)
+          return
         }
 
-        axios
-            .post('/api/v1/users/', formData)
-            .then(response => {
-                this.$router.push('/log-in')
-            })
-            .catch(error => {
-                if (error.response) {
-                    for (const property in error.response.data) {
-                    this.errors.push(`${property}: ${error.response.data[property]}`)  
-                    }
 
-                    console.log(JSON.stringify(error))
-                } else if (error.message) {
-                    this.errors.push('Something went wrong.Please try again')
+        this.$store.commit('setToken', token)
+        localStorage.setItem('token', token)
+        axios.defaults.headers.common['Authorization'] = 'Token ' + token
 
-                    console.log(JSON.stringify(error))
-                }
-            })
+
+        this.$router.push('/dashboard/my-account')
+      } catch (error) {
+        this.errors = []
+        if (error.response) {
+          const data = error.response.data
+          if (data && typeof data === 'object') {
+            for (const key in data) {
+              const val = data[key]
+              if (Array.isArray(val)) {
+                val.forEach(v => this.errors.push(`${key}: ${v}`))
+              } else {
+                this.errors.push(`${key}: ${val}`)
+              }
+            }
+          } else {
+            this.errors.push(String(data))
+          }
+          console.error('Server responded:', error.response.status, error.response.data)
+        } else if (error.request) {
+          this.errors.push('No response from server — check backend is running and CORS settings.')
+          console.error('No response:', error.request)
+        } else {
+          this.errors.push('Error: ' + error.message)
+          console.error('Request error:', error.message)
+        }
       }
     }
   }
