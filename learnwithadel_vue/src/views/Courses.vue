@@ -29,7 +29,7 @@
                             <div
                                 class="column is-4"
                                 v-for="course in courses"
-                                v-bind:key="courses.id"
+                                :key="courses.id"
                             >
                                 <div class="card is-fullheight">
                                     <div class="card-image">
@@ -47,7 +47,7 @@
 
                                         <div class="content">
                                             <p>{{ course.short_description }}</p>
-                                            <a href="#">More...</a>
+                                            <router-link :to="{name: 'Course', params: {slug: course.slug}}">More...</router-link>
                                         </div>
                                     </div>
                                 </div>

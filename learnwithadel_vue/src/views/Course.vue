@@ -1,0 +1,117 @@
+<template>
+  <div class="courses">
+    <div class="hero is-info">
+      <div class="hero-body has-text-centered">
+        <h1 class="title is-3 has-text-weight-bold" v-if="course">{{ course.title }}</h1>
+        <h1 class="title is-3 has-text-weight-bold" v-else>Loading...</h1>
+        <h2 class="subtitle">An Online place for learning what you want</h2>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="container">
+        <div class="columns content">
+          <div class="column is-2">
+            <h2>Table of Content</h2>
+            <ul>
+              <li><a href="#">Introduction</a></li>
+              <li><a href="#">Get Started</a></li>
+              <li><a href="#">Part 1</a></li>
+              <li><a href="#">Part 2</a></li>
+              <li><a href="#">Part 3</a></li>
+              <li><a href="#">Summary</a></li>
+            </ul>
+          </div>
+
+          <div class="column is-10">
+            <div v-if="loading">Loading...</div>
+
+            <div v-else-if="error" class="notification is-danger">{{ error }}</div>
+
+
+            <div v-else-if="course">
+              <div v-if="isAuthenticated">
+                <h2>Introduction</h2>
+
+
+                <div v-if="course.long_description" v-html="course.long_description"></div>
+                <div v-else-if="course.short_description">{{ course.short_description }}</div>
+                <div v-else>No description available.</div>
+              </div>
+
+              <div v-else>
+                <h2>Preview</h2>
+                <p>{{ course.short_description || 'Preview not available.' }}</p>
+                <p class="has-text-danger">Restricted Access! You need an account to view full content.</p>
+                <router-link :to="{ name: 'SignUp' }" class="button is-info">Log in / Sign up</router-link>
+              </div>
+            </div>
+
+
+            <div v-else>
+              <p>No course data available.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+
+<script>
+import axios from 'axios'
+
+export default {
+  data() {
+    return {
+      course: null,
+      loading: false,
+      error: null
+    }
+  },
+  computed: {
+    isAuthenticated() {
+      return this.$store?.state?.user?.isAuthenticated
+    }
+  },
+  async mounted() {
+    this.loading = true
+    this.error = null
+
+    const slug = this.$route.params.slug
+    if (!slug) {
+      this.error = 'Course slug missing.'
+      this.loading = false
+      return
+    }
+
+    try {
+      const resp = await axios.get(`/api/v1/courses/${slug}/`)
+      // لاگ برای دیباگ: اگر می‌خواهی ببینی چه میاد
+      console.log('course fetch', resp.data)
+      this.course = resp.data
+    } catch (err) {
+      console.error('Failed to load course:', err)
+      if (err.response && err.response.status === 404) {
+        this.error = 'Course not found.'
+      } else if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+        // سرور دسترسی کامل را محدود کرده — می‌توانیم preview از لیست بگیریم یا فقط پیام بدهیم
+        try {
+          const listResp = await axios.get('/api/v1/courses/')
+          const found = listResp.data.find(c => c.slug === slug)
+          if (found) this.course = found
+          else this.error = 'Course not found.'
+        } catch {
+          this.error = 'Failed to load course preview.'
+        }
+      } else {
+        this.error = 'Failed to load course. Please try again later.'
+      }
+    } finally {
+      this.loading = false
+    }
+  }
+}
+</script>

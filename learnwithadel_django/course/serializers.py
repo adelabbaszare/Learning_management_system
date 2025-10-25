@@ -4,6 +4,11 @@ from .models import Course
 
 class CourseListSerializer(serializers.ModelSerializer):
     class Meta:
-
         model = Course
         fields = ('id', 'title', 'slug', 'short_description')
+
+
+class CourseDetailListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ('id', 'title', 'slug', 'short_description', 'long_description')
