@@ -26,7 +26,11 @@
 
                     <div class="column is-10">
                         <div class="columns is-multiline is-variable is-10">
-                            <div class="column is-4">
+                            <div
+                                class="column is-4"
+                                v-for="course in courses"
+                                v-bind:key="courses.id"
+                            >
                                 <div class="card is-fullheight">
                                     <div class="card-image">
                                         <figure class="image is-4by3">
@@ -37,86 +41,18 @@
                                     <div class="card-content">
                                         <div class="media">
                                             <div class="media-content">
-                                                <p class="is-size-5">🤖Build a Telegram Bot using Python</p>
+                                                <p class="is-size-5">{{ course.title }}</p>
                                             </div>
                                         </div>
 
                                         <div class="content">
-                                            <p>Learn the basics bla bla bla ...</p>
+                                            <p>{{ course.short_description }}</p>
                                             <a href="#">More...</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="column is-4">
-                                <div class="card is-fullheight">
-                                    <div class="card-image">
-                                        <figure class="image is-4by3">
-                                            <img src="https://bulma.io/assets/images/placeholders/1280x960.png">
-                                        </figure>
-                                    </div>
-
-                                    <div class="card-content">
-                                        <div class="media">
-                                            <div class="media-content">
-                                                <p class="is-size-5">💻Introduction to Computer Science</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="content">
-                                            <p>Learn the basics bla bla bla ...</p>
-                                            <a href="#">More...</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="column is-4">
-                                <div class="card is-fullheight">
-                                    <div class="card-image">
-                                        <figure class="image is-4by3">
-                                            <img src="https://bulma.io/assets/images/placeholders/1280x960.png">
-                                        </figure>
-                                    </div>
-
-                                    <div class="card-content">
-                                        <div class="media">
-                                            <div class="media-content">
-                                                <p class="is-size-5">📊 Data Science</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="content">
-                                            <p>Learn the basics bla bla bla ...</p>
-                                            <a href="#">More...</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="column is-4">
-                                <div class="card is-fullheight">
-                                    <div class="card-image">
-                                        <figure class="image is-4by3">
-                                            <img src="https://bulma.io/assets/images/placeholders/1280x960.png">
-                                        </figure>
-                                    </div>
-
-                                    <div class="card-content">
-                                        <div class="media">
-                                            <div class="media-content">
-                                                <p class="is-size-5">🐍Artificial Intelligence with Python</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="content">
-                                            <p>Learn the basics bla bla bla ...</p>
-                                            <a href="#">More...</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                             <div class="column is-12">
                                 <nav class="pagination">
@@ -153,3 +89,27 @@
     flex-direction: column;
 }
 </style>
+
+
+<script>
+import axios from 'axios'
+
+export default {
+    data() {
+        return {
+            courses: []
+        }
+    },
+    mounted() {
+        console.log('mounted')
+
+        axios
+            .get('/api/v1/courses')
+            .then(response => {
+                console.log(response.data)
+
+                this.courses = response.data
+            })
+    }
+}
+</script>
