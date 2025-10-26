@@ -43,7 +43,7 @@
                 <h2>Preview</h2>
                 <p>{{ course.short_description || 'Preview not available.' }}</p>
                 <p class="has-text-danger">Restricted Access! You need an account to view full content.</p>
-                <router-link :to="{ name: 'SignUp' }" class="button is-info">Sign up</router-link>
+                <router-link :to="{ name: 'SignUp' }" class="button is-info mr-3">Sign up</router-link>
                 <router-link :to="{ name: 'LogIn' }" class="button is-info">Log in</router-link>
               </div>
             </div>
