@@ -1,31 +1,43 @@
 <template>
-  <nav
-    class="navbar is-info"
-    role="navigation"
-    aria-label="main navigation"
-    style="min-height: 5rem;"
-  >
+  <nav class="navbar is-info" role="navigation" aria-label="main navigation" style="min-height: 5rem;">
     <div class="navbar-brand">
-      <a class="navbar-item is-size-4" href="/">LearnwithAdel</a>
+      <router-link class="navbar-item is-size-4" to="/">LearnwithAdel</router-link>
     </div>
 
     <div id="navbar-item" class="navbar-menu">
       <div class="navbar-start">
-        <a href="/" class="navbar-item">Home</a>
-        <a href="/about" class="navbar-item">About</a>
-        <a href="/courses" class="navbar-item">Courses</a>
+        <router-link to="/" class="navbar-item">Home</router-link>
+        <router-link to="/about" class="navbar-item">About</router-link>
+        <router-link to="/courses" class="navbar-item">Courses</router-link>
       </div>
 
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a href="/sign-up" class="button is-primary">
-              <strong>Sign Up</strong>
-            </a>
-            <a href="/log-in" class="button is-light">Log in</a>
+            <template v-if="isAuthenticated">
+              <router-link to="/dashboard/my-account" class="button is-info">My Account</router-link>
+            </template>
+
+            <template v-else>
+              <router-link to="/sign-up" class="button is-primary"><strong>Sign Up</strong></router-link>
+              <router-link to="/log-in" class="button is-light">Log in</router-link>
+            </template>
           </div>
         </div>
       </div>
     </div>
   </nav>
 </template>
+
+<script>
+import { mapState } from 'vuex'
+
+export default {
+  computed: {
+    // امن و reactive
+    ...mapState({
+      isAuthenticated: state => state.user?.isAuthenticated || false
+    })
+  }
+}
+</script>

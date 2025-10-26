@@ -1,11 +1,10 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework.decorators import permission_classes
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from .models import Course
-from .serializers import CourseListSerializer, CourseDetailListSerializer
+from .models import Course, Lesson
+from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -19,5 +18,13 @@ def get_courses(request):
 @permission_classes([IsAuthenticated])
 def get_course(request, slug):
     course = get_object_or_404(Course, slug=slug)
-    serializer = CourseDetailListSerializer(course)
+    course_serializer = CourseDetailListSerializer(course)
+    lesson_serializer = LessonListSerializer(course.lessons.all(), many=True)
+
+    data = {
+        'course': course_serializer.data,
+        'lesson': lesson_serializer.data
+    }
+
     return Response(serializer.data)
+
