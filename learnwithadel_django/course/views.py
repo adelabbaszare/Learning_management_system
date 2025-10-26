@@ -26,5 +26,5 @@ def get_course(request, slug):
         'lesson': lesson_serializer.data
     }
 
-    return Response(serializer.data)
+    return Response(data)
 

@@ -32,7 +32,7 @@
             <div v-else-if="course">
               <div v-if="isAuthenticated">
                 <h2>Introduction</h2>
-
+                
 
                 <div v-if="course.long_description" v-html="course.long_description"></div>
                 <div v-else-if="course.short_description">{{ course.short_description }}</div>
@@ -43,7 +43,8 @@
                 <h2>Preview</h2>
                 <p>{{ course.short_description || 'Preview not available.' }}</p>
                 <p class="has-text-danger">Restricted Access! You need an account to view full content.</p>
-                <router-link :to="{ name: 'SignUp' }" class="button is-info">Log in / Sign up</router-link>
+                <router-link :to="{ name: 'SignUp' }" class="button is-info">Sign up</router-link>
+                <router-link :to="{ name: 'LogIn' }" class="button is-info">Log in</router-link>
               </div>
             </div>
 
@@ -76,6 +77,7 @@ export default {
       return this.$store?.state?.user?.isAuthenticated
     }
   },
+  
   async mounted() {
     this.loading = true
     this.error = null
@@ -89,15 +91,23 @@ export default {
 
     try {
       const resp = await axios.get(`/api/v1/courses/${slug}/`)
-      // لاگ برای دیباگ: اگر می‌خواهی ببینی چه میاد
       console.log('course fetch', resp.data)
-      this.course = resp.data
+
+      // اگر API ساختار { course: {...}, lesson: [...] } برگردانده
+      if (resp.data && resp.data.course) {
+        this.course = resp.data.course
+        this.lessons = resp.data.lesson || []
+      } else {
+        // در حالت معمول که API مستقیم course برمی‌گرداند
+        this.course = resp.data
+        this.lessons = resp.data.lessons || resp.data.lesson || []
+      }
     } catch (err) {
       console.error('Failed to load course:', err)
       if (err.response && err.response.status === 404) {
         this.error = 'Course not found.'
       } else if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-        // سرور دسترسی کامل را محدود کرده — می‌توانیم preview از لیست بگیریم یا فقط پیام بدهیم
+        // fallback: try to get preview from list
         try {
           const listResp = await axios.get('/api/v1/courses/')
           const found = listResp.data.find(c => c.slug === slug)
