@@ -19,7 +19,8 @@
                 v-bind:key="lesson.id"
               >
 
-                <a href="#">{{ lesson.title }}</a></li>
+                <a @click="activeLesson = lesson" >{{ lesson.title }}</a>
+              </li>
             </ul>
           </div>
 
@@ -32,13 +33,41 @@
             <div v-else-if="course">
               <div v-if="isAuthenticated">
 
-                <h2 v-if="activeLesson">{{ activeLesson.title }}</h2>
+                <h2 v-if="activeLesson">
+                  {{ activeLesson.title }}                      
+                </h2>                
 
                 <h2 v-else>Introduction</h2>
                 
                 <div v-if="course.long_description" v-html="course.long_description"></div>
                 <div v-else-if="course.short_description">{{ course.short_description }}</div>
                 <div v-else>No description available.</div>
+
+                <hr>
+                  <form v-on:sumbit.prevent="sumbitComment()" >
+                    <div class="field">
+                      <label class="label">Name</label>
+                      <div class="control">
+                        <input type="text" class="input" v-model="comment.name">
+                        </input>
+                      </div>
+                    </div>
+
+                    <div class="field">
+                      <label class="label">Content</label>
+                      <div class="control">
+                        <textarea class="textarea" v-model="comment.content"></textarea>
+                        </input>
+                      </div>
+                    </div>
+
+                    <div class="field">
+                      <div class="control">
+                        <button class="button is-link">Submit</button> 
+                      </div>
+                    </div>
+                  </form>
+                  </hr>
               </div>
 
               <div v-else>
@@ -71,6 +100,11 @@ export default {
     return {
       course: {},
       lessons: [],
+      activeLesson: null,
+      comment: {
+        name: '',
+        content: ''
+      },
       loading: false,
       error: null
     }
