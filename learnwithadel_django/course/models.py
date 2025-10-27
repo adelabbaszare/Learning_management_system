@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 class Category(models.Model):
@@ -54,3 +55,12 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = 'Lesson'
         verbose_name_plural = 'Lessons'
+
+
+class Comment(models.Model):
+    course = models.ForeignKey(Course, related_name='comments', on_delete=models.CASCADE)
+    lesson = models.ForeignKey(Lesson, related_name='comments', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
