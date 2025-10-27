@@ -2,8 +2,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework import status
 
-from .models import Course, Lesson
+from .models import Course, Lesson, Comment
 from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer
 
 @api_view(['GET'])
@@ -28,3 +29,32 @@ def get_course(request, slug):
 
     return Response(data)
 
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_comment(request, course_slug, lesson_slug):
+    data = request.data
+    name = data.get('name')
+    content = data.get('content')
+
+    # validation
+    if not name or not content:
+        return Response({'detail': 'name and content are required.'},
+                        status=status.HTTP_400_BAD_REQUEST)
+
+    # get course and lesson (lesson must belong to course)
+    course = get_object_or_404(Course, slug=course_slug)
+    lesson = get_object_or_404(Lesson, course=course, slug=lesson_slug)
+
+    # create comment (created_by from authenticated user)
+    user = request.user if request.user.is_authenticated else None
+
+    comment = Comment.objects.create(
+        course=course,
+        lesson=lesson,
+        name=name,
+        content=content,
+        created_by=user
+    )
+
+    return Response({'message': 'The comment was added!', 'id': comment.id}, status=status.HTTP_201_CREATED)

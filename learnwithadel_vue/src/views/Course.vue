@@ -14,12 +14,8 @@
           <div class="column is-2">
             <h2>Table of Content</h2>
             <ul>
-              <li
-                v-for="lesson in lessons" 
-                v-bind:key="lesson.id"
-              >
-
-                <a @click="activeLesson = lesson" >{{ lesson.title }}</a>
+              <li v-for="lesson in lessons" :key="lesson.id">
+                <a href="#" @click.prevent="setActiveLesson(lesson)">{{ lesson.title }}</a>
               </li>
             </ul>
           </div>
@@ -29,45 +25,41 @@
 
             <div v-else-if="error" class="notification is-danger">{{ error }}</div>
 
-
             <div v-else-if="course">
               <div v-if="isAuthenticated">
 
-                <h2 v-if="activeLesson">
-                  {{ activeLesson.title }}                      
-                </h2>                
-
+                <h2 v-if="activeLesson">{{ activeLesson.title }}</h2>
                 <h2 v-else>Introduction</h2>
-                
-                <div v-if="course.long_description" v-html="course.long_description"></div>
+
+                <div v-if="activeLesson && activeLesson.long_description" v-html="activeLesson.long_description"></div>
+                <div v-else-if="course.long_description" v-html="course.long_description"></div>
                 <div v-else-if="course.short_description">{{ course.short_description }}</div>
                 <div v-else>No description available.</div>
 
-                <hr>
-                  <form v-on:sumbit.prevent="sumbitComment()" >
-                    <div class="field">
-                      <label class="label">Name</label>
-                      <div class="control">
-                        <input type="text" class="input" v-model="comment.name">
-                        </input>
-                      </div>
-                    </div>
+                <hr />
 
-                    <div class="field">
-                      <label class="label">Content</label>
-                      <div class="control">
-                        <textarea class="textarea" v-model="comment.content"></textarea>
-                        </input>
-                      </div>
+                <form @submit.prevent="submitComment">
+                  <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                      <input type="text" class="input" v-model="comment.name" />
                     </div>
+                  </div>
 
-                    <div class="field">
-                      <div class="control">
-                        <button class="button is-link">Submit</button> 
-                      </div>
+                  <div class="field">
+                    <label class="label">Content</label>
+                    <div class="control">
+                      <textarea class="textarea" v-model="comment.content"></textarea>
                     </div>
-                  </form>
-                  </hr>
+                  </div>
+
+                  <div class="field">
+                    <div class="control">
+                      <button type="submit" class="button is-link">Submit</button>
+                    </div>
+                  </div>
+                </form>
+
               </div>
 
               <div v-else>
@@ -78,7 +70,6 @@
                 <router-link :to="{ name: 'LogIn' }" class="button is-info">Log in</router-link>
               </div>
             </div>
-
 
             <div v-else>
               <p>No course data available.</p>
@@ -91,30 +82,26 @@
   </div>
 </template>
 
-
 <script>
 import axios from 'axios'
 
 export default {
   data() {
     return {
-      course: {},
+      course: null,
       lessons: [],
       activeLesson: null,
-      comment: {
-        name: '',
-        content: ''
-      },
+      comment: { name: '', content: '' },
       loading: false,
       error: null
     }
   },
   computed: {
     isAuthenticated() {
-      return this.$store?.state?.user?.isAuthenticated
+      return this.$store?.state?.user?.isAuthenticated || false
     }
   },
-  
+
   async mounted() {
     this.loading = true
     this.error = null
@@ -130,16 +117,14 @@ export default {
       const resp = await axios.get(`/api/v1/courses/${slug}/`)
       console.log('course fetch', resp.data)
 
-      // اگر API ساختار { course: {...}, lesson: [...] } برگردانده
       if (resp.data && resp.data.course) {
         this.course = resp.data.course
         this.lessons = resp.data.lesson || []
       } else {
-        // در حالت معمول که API مستقیم course برمی‌گرداند
         this.course = resp.data
         this.lessons = resp.data.lessons || resp.data.lesson || []
       }
-      // مقداردهی پیش‌فرض activeLesson به اولین درس در صورت وجود
+
       this.activeLesson = (this.lessons && this.lessons.length) ? this.lessons[0] : null
 
     } catch (err) {
@@ -147,7 +132,6 @@ export default {
       if (err.response && err.response.status === 404) {
         this.error = 'Course not found.'
       } else if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-        // fallback: try to get preview from list
         try {
           const listResp = await axios.get('/api/v1/courses/')
           const found = listResp.data.find(c => c.slug === slug)
@@ -161,6 +145,52 @@ export default {
       }
     } finally {
       this.loading = false
+    }
+  },
+
+  methods: {
+    setActiveLesson(lesson) {
+      this.activeLesson = lesson
+      console.log('setActiveLesson ->', lesson)
+    },
+
+    async submitComment() {
+      console.log('submitComment called', { comment: this.comment, activeLesson: this.activeLesson, course: this.course })
+
+      if (!this.course || !this.course.slug) {
+        alert('Course not loaded correctly.')
+        return
+      }
+      if (!this.activeLesson || !this.activeLesson.slug) {
+        alert('Please select a lesson first.')
+        return
+      }
+      if (!this.comment.name || !this.comment.content) {
+        alert('Please fill both name and content.')
+        return
+      }
+
+      const url = `/api/v1/courses/${this.course.slug}/lessons/${this.activeLesson.slug}/comments/`
+      console.log('POST URL:', url)
+
+      const token = localStorage.getItem('token')
+      const headers = { 'Content-Type': 'application/json' }
+      if (token) headers['Authorization'] = 'Token ' + token
+
+      try {
+        const resp = await axios.post(url, this.comment, { headers })
+        console.log('comment created:', resp.data)
+        this.comment.name = ''
+        this.comment.content = ''
+        alert('The comment was added!')
+      } catch (err) {
+        console.error('Failed to submit comment:', err, err.response && err.response.data)
+        if (err.response) {
+          alert('Server error: ' + JSON.stringify(err.response.data))
+        } else {
+          alert('Network error while submitting comment.')
+        }
+      }
     }
   }
 }
