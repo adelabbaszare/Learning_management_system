@@ -31,9 +31,11 @@
 
             <div v-else-if="course">
               <div v-if="isAuthenticated">
-                <h2>Introduction</h2>
-                
 
+                <h2 v-if="activeLesson">{{ activeLesson.title }}</h2>
+
+                <h2 v-else>Introduction</h2>
+                
                 <div v-if="course.long_description" v-html="course.long_description"></div>
                 <div v-else-if="course.short_description">{{ course.short_description }}</div>
                 <div v-else>No description available.</div>
@@ -103,6 +105,9 @@ export default {
         this.course = resp.data
         this.lessons = resp.data.lessons || resp.data.lesson || []
       }
+      // مقداردهی پیش‌فرض activeLesson به اولین درس در صورت وجود
+      this.activeLesson = (this.lessons && this.lessons.length) ? this.lessons[0] : null
+
     } catch (err) {
       console.error('Failed to load course:', err)
       if (err.response && err.response.status === 404) {
