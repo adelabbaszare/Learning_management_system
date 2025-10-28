@@ -108,6 +108,7 @@ export default {
       lessons: [],
       comments: [],
       activeLesson: null,
+      errors: [],
       comment: { name: '', content: '' },
       loading: false,
       error: null
@@ -182,11 +183,9 @@ export default {
         return
       }
 
-      // correct URL: "courses" (plural) and "lessons/<lesson_slug>/comments/get-comments"
       const url = `/api/v1/courses/${this.course.slug}/lessons/${this.activeLesson.slug}/comments/get-comments`
       console.log('GET comments URL:', url)
 
-      // include token if available (backend might require auth)
       const token = localStorage.getItem('token')
       const headers = {}
       if (token) headers['Authorization'] = 'Token ' + token
@@ -206,6 +205,18 @@ export default {
 
     async submitComment() {
       console.log('submitComment called', { comment: this.comment, activeLesson: this.activeLesson, course: this.course })
+
+      /*
+      this.errors - []
+
+      if(this.comment.name === '') {
+        this.errors.push('The name must be filled out!')
+      }
+
+      if(this.comment.content === '') {
+        this.errors.push('The Content must be filled out!')
+      }
+      */
 
       if (!this.course || !this.course.slug) {
         alert('Course not loaded correctly.')
@@ -235,6 +246,7 @@ export default {
         // refresh comments after successful POST
         this.getComments()
         alert('The comment was added!')
+
       } catch (err) {
         console.error('Failed to submit comment:', err, err?.response?.data)
         if (err.response) {

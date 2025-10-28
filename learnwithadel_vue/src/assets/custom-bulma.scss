@@ -1,9 +1,5 @@
-// src/assets/custom-bulma.scss
+// 1. تعریف متغیرهای SCSS Bulma قبل از import
+$primary: hsl(284, 98%, 61%);
 
-$primary: #c822ff;
-$info: #2196f3;
-$success: #4caf50;
-$warning: #ffc107;
-$danger: #f44336;
-
-@import "bulma/bulma";
+// 2. import Bulma
+@import "~bulma/bulma";
