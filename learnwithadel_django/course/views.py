@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 
 from .models import Course, Lesson, Comment
-from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer
+from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer, CommentsSerializer
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -28,6 +28,14 @@ def get_course(request, slug):
     }
 
     return Response(data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_comments(request, course_slug, lesson_slug):
+    lesson = Lesson.objects.get(slug=lesson_slug)
+    serializer = CommentsSerializer(lesson.comments.all(), many=True)
+    return Response(serializer.data)
 
 
 @api_view(['POST'])

@@ -90,6 +90,7 @@ export default {
     return {
       course: null,
       lessons: [],
+      comments: [],
       activeLesson: null,
       comment: { name: '', content: '' },
       loading: false,
@@ -152,6 +153,39 @@ export default {
     setActiveLesson(lesson) {
       this.activeLesson = lesson
       console.log('setActiveLesson ->', lesson)
+
+      // get comments for the selected lesson
+      this.getComments()
+    },
+
+    getComments() {
+      // make sure course and activeLesson are set
+      if (!this.course || !this.course.slug || !this.activeLesson || !this.activeLesson.slug) {
+        console.warn('getComments: course or lesson not ready yet')
+        this.comments = []
+        return
+      }
+
+      // correct URL: "courses" (plural) and "lessons/<lesson_slug>/comments/get-comments"
+      const url = `/api/v1/courses/${this.course.slug}/lessons/${this.activeLesson.slug}/comments/get-comments`
+      console.log('GET comments URL:', url)
+
+      // include token if available (backend might require auth)
+      const token = localStorage.getItem('token')
+      const headers = {}
+      if (token) headers['Authorization'] = 'Token ' + token
+
+      axios
+        .get(url, { headers })
+        .then(response => {
+          console.log('getComments response:', response.data)
+          this.comments = response.data
+        })
+        .catch(err => {
+          console.error('Failed to fetch comments:', err, err?.response?.data)
+          // fallback: clear comments and optionally show a message
+          this.comments = []
+        })
     },
 
     async submitComment() {
@@ -182,9 +216,11 @@ export default {
         console.log('comment created:', resp.data)
         this.comment.name = ''
         this.comment.content = ''
+        // refresh comments after successful POST
+        this.getComments()
         alert('The comment was added!')
       } catch (err) {
-        console.error('Failed to submit comment:', err, err.response && err.response.data)
+        console.error('Failed to submit comment:', err, err?.response?.data)
         if (err.response) {
           alert('Server error: ' + JSON.stringify(err.response.data))
         } else {
