@@ -7,10 +7,19 @@ from rest_framework import status
 from .models import Course, Lesson, Comment
 from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer, CommentsSerializer
 
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_courses(request):
     courses = Course.objects.all()
+    serializer = CourseListSerializer(courses, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_frontpage_courses(request):
+    courses = Course.objects.all()[0:4]
     serializer = CourseListSerializer(courses, many=True)
     return Response(serializer.data)
 
@@ -65,4 +74,6 @@ def add_comment(request, course_slug, lesson_slug):
         created_by=user
     )
 
-    return Response({'message': 'The comment was added!', 'id': comment.id}, status=status.HTTP_201_CREATED)
+    serializer = CommentsSerializer(comment)
+
+    return Response(serializer.data, status=status.HTTP_201_CREATED)

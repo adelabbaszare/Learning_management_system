@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <section class="section"></section>
+    <section class="section">
       <div class="container">
         <div class="columns is-multiline">
           <div class="column is-4">
@@ -45,13 +45,48 @@
           <div class="column is-12 has-text-centered">
             <a href="#" class="button is-onfo is-size-3 mt-6 mb-6">Click to get started</a>
           </div>
+
+          <hr>
+            <div
+                class="column is-4"
+                v-for="course in courses"
+                :key="courses.id"
+            >
+                <CourseItem :course="course" />
+            </div>
+          </hr>
+
         </div>
       </div>
+    </section>
   </div>
 </template>
 
 <script>
+import CourseItem from '@/components/CourseItem.vue';
+import axios from 'axios'
+
 export default {
-  name: 'Home'
+  name: 'Home',
+
+  data() {
+        return {
+            courses: []
+        }
+    },
+    components: {
+        CourseItem
+    },
+    mounted() {
+        console.log('mounted')
+
+        axios
+            .get('/api/v1/courses/get_frontpage_courses/')
+            .then(response => {
+                console.log(response.data)
+
+                this.courses = response.data
+            })
+    }
 }
 </script>
