@@ -38,6 +38,22 @@
 
                 <hr />
 
+                <article 
+                  class="media"
+                  v-for="comment in comments" 
+                  v-bind:key="comment.id" 
+                >
+
+                  <div class="media-content">
+                    <div class="content">
+                      <p>
+                        <strong>{{ comment.name }}</strong> {{ comment.created_at }}<br>
+                        {{ comment.content }}
+                      </p>
+                    </div>
+                  </div>
+                </article>
+
                 <form @submit.prevent="submitComment">
                   <div class="field">
                     <label class="label">Name</label>
