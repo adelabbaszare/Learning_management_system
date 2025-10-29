@@ -19,7 +19,7 @@ def get_courses(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_frontpage_courses(request):
-    courses = Course.objects.all()[0:4]
+    courses = Course.objects.all()[0:3]
     serializer = CourseListSerializer(courses, many=True)
     return Response(serializer.data)
 
