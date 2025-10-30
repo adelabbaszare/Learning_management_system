@@ -80,16 +80,24 @@ import axios from 'axios'
 export default {
     data() {
         return {
-            courses: []
+            courses: [],
+            categories: [],
+            activeCategory: null
         }
     },
     components: {
         CourseItem
     },
-    mounted() {
+    async mounted() {
         console.log('mounted')
 
-        axios
+        await axios
+            .get('api/v1/courses/get_categories')
+            .then(response => {
+                console.log(response.data)
+            })
+
+        await axios
             .get('/api/v1/courses')
             .then(response => {
                 console.log(response.data)

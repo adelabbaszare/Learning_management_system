@@ -4,9 +4,15 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 
-from .models import Course, Lesson, Comment
-from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer, CommentsSerializer
+from .models import Course, Lesson, Comment, Category
+from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer, CommentsSerializer, CategorySerializer
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_categories(request):
+    categories = Category.objects.all()
+    serializer = CategorySerializer(categories, many=True)
+    return Resoonse(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
