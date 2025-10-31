@@ -15,10 +15,18 @@
                             <p class="menu-label">Categories</p>
 
                             <ul class="menu-list">
-                                <li><a class="is-active">All Courses</a></li>
+                                <li>
+                                    <a
+                                        v-bind:class="{'is-active': !activeCategory}"
+                                        @click="setActiveCategory(null)"
+                                    >
+                                        All Courses
+                                    </a>
+                                </li>
                                 <li
                                     v-for="category in categories"
                                     v-bind:key="category.id"
+                                    @click="setActiveCategory(category)"
                                 >
                                     <a>
                                         {{ category.title }}
@@ -110,6 +118,12 @@ export default {
 
                 this.courses = response.data
             })
+    },
+    methods: {
+        setActiveCategory(category) {
+            console.log(category)
+            this.activeCategory = category
+        }
     }
 }
 </script>
