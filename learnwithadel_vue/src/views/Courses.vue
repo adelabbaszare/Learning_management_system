@@ -16,10 +16,14 @@
 
                             <ul class="menu-list">
                                 <li><a class="is-active">All Courses</a></li>
-                                <li><a>Python</a></li>
-                                <li><a>Machine Learning</a></li>
-                                <li><a>Data Science</a></li>
-                                <li><a>Artificial Intelligence</a></li>
+                                <li
+                                    v-for="category in categories"
+                                    v-bind:key="category.id"
+                                >
+                                    <a>
+                                        {{ category.title }}
+                                    </a>
+                                </li>
                             </ul>
                         </aside>
                     </div>
@@ -95,6 +99,8 @@ export default {
             .get('api/v1/courses/get_categories/')
             .then(response => {
                 console.log(response.data)
+
+                this.categories = response.data
             })
 
         await axios
