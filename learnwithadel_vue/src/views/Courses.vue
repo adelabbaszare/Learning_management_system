@@ -41,7 +41,7 @@
                             <div
                                 class="column is-4"
                                 v-for="course in courses"
-                                :key="courses.id"
+                                :key="course.id"
                             >
 
                                 <CourseItem :course="course" />
@@ -111,18 +111,31 @@ export default {
                 this.categories = response.data
             })
 
-        await axios
-            .get('/api/v1/courses/')
-            .then(response => {
-                console.log(response.data)
-
-                this.courses = response.data
-            })
+        this.getCourses()
     },
     methods: {
         setActiveCategory(category) {
             console.log(category)
             this.activeCategory = category
+
+            if (this.activeCategory) {
+                this.getCourses()
+            }
+        },
+        getCourses(){
+            let url = '/api/v1/courses/'
+
+            if (this.activeCategory) {
+                url += '?category_id=' + this.activeCategory.id
+            }
+
+            axios
+                .get(url)
+                .then(response => {
+                    console.log(response.data)
+
+                    this.courses = response.data
+                })
         }
     }
 }
