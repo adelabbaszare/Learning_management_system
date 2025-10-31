@@ -12,7 +12,7 @@ from .serializers import CourseListSerializer, CourseDetailListSerializer, Lesso
 def get_categories(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
-    return Resoonse(serializer.data)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

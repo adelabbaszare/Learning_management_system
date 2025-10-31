@@ -92,13 +92,13 @@ export default {
         console.log('mounted')
 
         await axios
-            .get('api/v1/courses/get_categories')
+            .get('api/v1/courses/get_categories/')
             .then(response => {
                 console.log(response.data)
             })
 
         await axios
-            .get('/api/v1/courses')
+            .get('/api/v1/courses/')
             .then(response => {
                 console.log(response.data)
 
