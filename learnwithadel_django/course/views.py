@@ -17,7 +17,12 @@ def get_categories(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_courses(request):
+    category_id = request.GET.get('category_id', '')
     courses = Course.objects.all()
+
+    if category_id:
+        courses = courses.filter(categories__in=[int(category_id)])
+
     serializer = CourseListSerializer(courses, many=True)
     return Response(serializer.data)
 

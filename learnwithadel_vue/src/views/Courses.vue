@@ -118,9 +118,7 @@ export default {
             console.log(category)
             this.activeCategory = category
 
-            if (this.activeCategory) {
-                this.getCourses()
-            }
+            this.getCourses()
         },
         getCourses(){
             let url = '/api/v1/courses/'
