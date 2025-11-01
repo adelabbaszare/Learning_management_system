@@ -56,6 +56,9 @@ export default {
       errors: []
     };
   },
+  mounted() {
+  document.title = 'Log in | LearnwithAdel'
+  },
   methods: {
     submitForm() {
       this.errors = [];

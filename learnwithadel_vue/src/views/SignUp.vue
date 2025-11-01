@@ -64,6 +64,9 @@ export default {
       errors: []
     }
   },
+  mounted() {
+  document.title = 'Sign Up | LearnwithAdel'
+  },
   methods: {
     async submitForm() {
       this.errors = []
