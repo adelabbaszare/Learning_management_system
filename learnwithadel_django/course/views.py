@@ -1,21 +1,25 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 
 from .models import Course, Lesson, Comment, Category
 from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer, CommentsSerializer, CategorySerializer
 
+
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@authentication_classes([])
+@permission_classes([])
 def get_categories(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@authentication_classes([])
+@permission_classes([])
 def get_courses(request):
     category_id = request.GET.get('category_id', '')
     courses = Course.objects.all()
@@ -28,7 +32,8 @@ def get_courses(request):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@authentication_classes([])
+@permission_classes([])
 def get_frontpage_courses(request):
     courses = Course.objects.all()[0:3]
     serializer = CourseListSerializer(courses, many=True)
@@ -36,14 +41,20 @@ def get_frontpage_courses(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@authentication_classes([])
+@permission_classes([])
 def get_course(request, slug):
     course = get_object_or_404(Course, slug=slug)
     course_serializer = CourseDetailListSerializer(course)
     lesson_serializer = LessonListSerializer(course.lessons.all(), many=True)
 
+    if request.user.is_authenticated:
+        course_data = course_serializer.data
+    else:
+        course_data = {}
+
     data = {
-        'course': course_serializer.data,
+        'course': course_data,
         'lesson': lesson_serializer.data
     }
 
