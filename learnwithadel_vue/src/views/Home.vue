@@ -80,6 +80,8 @@ export default {
     mounted() {
         console.log('mounted')
 
+        document.title = 'LearnwithAdel'
+
         axios
             .get('/api/v1/courses/get_frontpage_courses/')
             .then(response => {

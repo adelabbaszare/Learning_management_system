@@ -17,6 +17,11 @@
 import axios from 'axios'
 
 export default {
+
+  mounted() {
+    document.title = 'Dashboard | LearnwithAdel'
+  },
+
   methods: {
     async logout() {
       console.log('logout')
