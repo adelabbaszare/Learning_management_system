@@ -43,7 +43,7 @@
           </div>
 
           <div class="column is-12 has-text-centered">
-            <a href="#" class="button is-onfo is-size-3 mt-6 mb-6">Click to get started</a>
+            <a href="/sign-up" class="button is-onfo is-size-3 mt-6 mb-6">Click to get started</a>
           </div>
 
           <hr>
