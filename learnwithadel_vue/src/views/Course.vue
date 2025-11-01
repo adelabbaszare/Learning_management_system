@@ -108,7 +108,6 @@ export default {
       lessons: [],
       comments: [],
       activeLesson: null,
-      errors: [],
       comment: { name: '', content: '' },
       loading: false,
       error: null
@@ -144,6 +143,8 @@ export default {
       }
 
       this.activeLesson = (this.lessons && this.lessons.length) ? this.lessons[0] : null
+
+      document.title = this.course.title + ' | LearnwithAdel'
 
     } catch (err) {
       console.error('Failed to load course:', err)
