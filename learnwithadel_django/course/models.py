@@ -87,3 +87,6 @@ class Quiz(models.Model):
     op1 = models.CharField(max_length=200, null=True)
     op2 = models.CharField(max_length=200, null=True)
     op3 = models.CharField(max_length=200, null=True)
+
+    class Meta:
+        verbose_name_plural = 'Quizzes'
