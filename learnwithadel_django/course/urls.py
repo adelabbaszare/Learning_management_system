@@ -19,6 +19,6 @@ urlpatterns = [
     path('<slug:slug>/', views.get_course, name='course-detail'),
 
     # quiz
-    path('<slug:course_slug>/lessons/<slug:lesson_slug>/get-quiz', views.get_quiz)
+    path('<slug:course_slug>/lessons/<slug:lesson_slug>/get-quiz/', views.get_quiz)
 ]   
 

@@ -38,6 +38,33 @@
 
                 <hr />
 
+                <template v-if="activeLesson.lesson_type === 'quiz'" >
+                  <h3>{{ quiz.question }}</h3>
+
+                  <div class="control">
+                    <label class="radio">
+                      <input type="radio" :value="quiz.op1" v-model="selectedAnswer">{{ quiz.op1 }}</input>
+                    </label>
+                  </div>
+
+                  <div class="control">
+                    <label class="radio">
+                      <input type="radio" :value="quiz.op2" v-model="selectedAnswer">{{ quiz.op2 }}</input>
+                    </label>
+                  </div>
+
+                  <div class="control">
+                    <label class="radio">
+                      <input type="radio" :value="quiz.op3" v-model="selectedAnswer">{{ quiz.op3 }}</input>
+                    </label>
+                  </div>
+
+                  <div class="control mt-4">
+                    <button class="button is-info">Submit</button>
+                  </div>
+
+                </template>
+
                 <article 
                   class="media"
                   v-for="comment in comments" 
@@ -110,7 +137,9 @@ export default {
       activeLesson: null,
       comment: { name: '', content: '' },
       loading: false,
-      error: null
+      error: null,
+      quiz: {},
+      selectedAnswer: ''
     }
   },
   computed: {
@@ -172,8 +201,22 @@ export default {
       this.activeLesson = lesson
       console.log('setActiveLesson ->', lesson)
 
-      // get comments for the selected lesson
+      if (lesson.lesson_type === 'quiz') {  
+        this.getQuiz()
+      } else {
+      // get comments for the selected lesson and article type, not quiz
       this.getComments()
+      }
+    },
+
+    getQuiz() {
+      axios
+        .get (`/api/v1/courses/${this.course.slug}/lessons/${this.activeLesson.slug}/get-quiz/`)
+        .then(response => {
+          console.log(response.data)
+
+          this.quiz = response.data
+        })
     },
 
     getComments() {
