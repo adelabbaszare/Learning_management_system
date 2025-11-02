@@ -5,7 +5,15 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 
 from .models import Course, Lesson, Comment, Category
-from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer, CommentsSerializer, CategorySerializer
+from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer, CommentsSerializer, CategorySerializer, QuizSerializer
+
+
+@api_view(['GET'])
+def get_quiz(reuest, course_slug, lesson_slug):
+    lesson = Lesson.objects.get(slug=lesson_slug)
+    quiz = lesson.quizzes.first()
+    serializer = QuizSerializer(quiz)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])

@@ -17,5 +17,8 @@ urlpatterns = [
     
     # course detail (must come after comments)
     path('<slug:slug>/', views.get_course, name='course-detail'),
+
+    # quiz
+    path('<slug:course_slug>/lessons/<slug:lesson_slug>/get-quiz', views.get_quiz)
 ]   
 
