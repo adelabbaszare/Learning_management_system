@@ -60,8 +60,17 @@
                   </div>
 
                   <div class="control mt-4">
-                    <button class="button is-info">Submit</button>
+                    <button class="button is-info" @click="sumbitQuiz">Submit</button>
                   </div>
+
+                  <template v-if="quizResult == 'correct' ">
+                    <div class="notification is-success mt-4">Correct✅</div>
+                  </template>
+
+
+                  <template v-if="quizResult == 'incorrect' ">
+                    <div class="notification is-danger mt-4">Wrong❌, Please Try Again</div>
+                  </template>
 
                 </template>
 
@@ -139,7 +148,8 @@ export default {
       loading: false,
       error: null,
       quiz: {},
-      selectedAnswer: ''
+      selectedAnswer: '',
+      quizResult: null
     }
   },
   computed: {
@@ -197,6 +207,19 @@ export default {
   },
 
   methods: {
+    sumbitQuiz() {
+      this.quizResult = null
+
+      if (this.selectedAnswer) {
+        if (this.selectedAnswer === this.quiz.answer) {
+          this.quizResult = 'correct'
+        } else {
+          this.quizResult = 'incorrect'
+        }
+      } else {
+        alert('Select Answer First')
+      }
+    },
     setActiveLesson(lesson) {
       this.activeLesson = lesson
       console.log('setActiveLesson ->', lesson)
