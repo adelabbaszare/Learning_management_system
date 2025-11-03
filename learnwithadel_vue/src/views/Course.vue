@@ -38,80 +38,83 @@
 
                 <hr />
 
-                <template v-if="activeLesson.lesson_type === 'quiz'" >
-                  <h3>{{ quiz.question }}</h3>
+                <template v-if="activeLesson">
+                  <template v-if="activeLesson.lesson_type === 'quiz'" >
+                    <h3>{{ quiz.question }}</h3>
 
-                  <div class="control">
-                    <label class="radio">
-                      <input type="radio" :value="quiz.op1" v-model="selectedAnswer">{{ quiz.op1 }}</input>
-                    </label>
-                  </div>
+                    <div class="control">
+                      <label class="radio">
+                        <input type="radio" :value="quiz.op1" v-model="selectedAnswer">{{ quiz.op1 }}</input>
+                      </label>
+                    </div>
 
-                  <div class="control">
-                    <label class="radio">
-                      <input type="radio" :value="quiz.op2" v-model="selectedAnswer">{{ quiz.op2 }}</input>
-                    </label>
-                  </div>
+                    <div class="control">
+                      <label class="radio">
+                        <input type="radio" :value="quiz.op2" v-model="selectedAnswer">{{ quiz.op2 }}</input>
+                      </label>
+                    </div>
 
-                  <div class="control">
-                    <label class="radio">
-                      <input type="radio" :value="quiz.op3" v-model="selectedAnswer">{{ quiz.op3 }}</input>
-                    </label>
-                  </div>
+                    <div class="control">
+                      <label class="radio">
+                        <input type="radio" :value="quiz.op3" v-model="selectedAnswer">{{ quiz.op3 }}</input>
+                      </label>
+                    </div>
 
-                  <div class="control mt-4">
-                    <button class="button is-info" @click="sumbitQuiz">Submit</button>
-                  </div>
+                    <div class="control mt-4">
+                      <button class="button is-info" @click="sumbitQuiz">Submit</button>
+                    </div>
 
-                  <template v-if="quizResult == 'correct' ">
-                    <div class="notification is-success mt-4">Correct✅</div>
+                    <template v-if="quizResult == 'correct' ">
+                      <div class="notification is-success mt-4">Correct✅</div>
+                    </template>
+
+
+                    <template v-if="quizResult == 'incorrect' ">
+                      <div class="notification is-danger mt-4">Wrong❌, Please Try Again</div>
+                    </template>
                   </template>
+                
 
+                  <template v-if="activeLesson.lesson_type === 'article'">
+                  <article 
+                    class="media"
+                    v-for="comment in comments" 
+                    v-bind:key="comment.id" 
+                  >
 
-                  <template v-if="quizResult == 'incorrect' ">
-                    <div class="notification is-danger mt-4">Wrong❌, Please Try Again</div>
+                    <div class="media-content">
+                      <div class="content">
+                        <p>
+                          <strong>{{ comment.name }}</strong> {{ comment.created_at }}<br>
+                          {{ comment.content }}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+
+                  <form @submit.prevent="submitComment">
+                    <div class="field">
+                      <label class="label">Name</label>
+                      <div class="control">
+                        <input type="text" class="input" v-model="comment.name" />
+                      </div>
+                    </div>
+
+                    <div class="field">
+                      <label class="label">Content</label>
+                      <div class="control">
+                        <textarea class="textarea" v-model="comment.content"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="field">
+                      <div class="control">
+                        <button type="submit" class="button is-link">Submit</button>
+                      </div>
+                    </div>
+                  </form>
                   </template>
-                </template>
-
-                <template v-if="activeLesson.lesson_type === 'article'">
-                <article 
-                  class="media"
-                  v-for="comment in comments" 
-                  v-bind:key="comment.id" 
-                >
-
-                  <div class="media-content">
-                    <div class="content">
-                      <p>
-                        <strong>{{ comment.name }}</strong> {{ comment.created_at }}<br>
-                        {{ comment.content }}
-                      </p>
-                    </div>
-                  </div>
-                </article>
-
-                <form @submit.prevent="submitComment">
-                  <div class="field">
-                    <label class="label">Name</label>
-                    <div class="control">
-                      <input type="text" class="input" v-model="comment.name" />
-                    </div>
-                  </div>
-
-                  <div class="field">
-                    <label class="label">Content</label>
-                    <div class="control">
-                      <textarea class="textarea" v-model="comment.content"></textarea>
-                    </div>
-                  </div>
-
-                  <div class="field">
-                    <div class="control">
-                      <button type="submit" class="button is-link">Submit</button>
-                    </div>
-                  </div>
-                </form>
-                </template>
+                </template>  
               </div>
 
               <div v-else>
@@ -223,6 +226,12 @@ export default {
     setActiveLesson(lesson) {
       this.activeLesson = lesson
       console.log('setActiveLesson ->', lesson)
+
+      // Reset
+      this.quizResult = null
+      this.selectedAnswer = ''
+      this.quiz = {} // Delete Previous Quiz
+      this.comments = [] // Delete Previous Comments
 
       if (lesson.lesson_type === 'quiz') {  
         this.getQuiz()
