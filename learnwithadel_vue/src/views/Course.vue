@@ -71,9 +71,9 @@
                   <template v-if="quizResult == 'incorrect' ">
                     <div class="notification is-danger mt-4">Wrong❌, Please Try Again</div>
                   </template>
-
                 </template>
 
+                <template v-if="activeLesson.lesson_type === 'article'">
                 <article 
                   class="media"
                   v-for="comment in comments" 
@@ -111,7 +111,7 @@
                     </div>
                   </div>
                 </form>
-
+                </template>
               </div>
 
               <div v-else>
