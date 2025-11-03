@@ -56,10 +56,7 @@ def get_course(request, slug):
     course_serializer = CourseDetailListSerializer(course)
     lesson_serializer = LessonListSerializer(course.lessons.all(), many=True)
 
-    if request.user.is_authenticated:
-        course_data = course_serializer.data
-    else:
-        course_data = {}
+    course_data = course_serializer.data
 
     data = {
         'course': course_data,
