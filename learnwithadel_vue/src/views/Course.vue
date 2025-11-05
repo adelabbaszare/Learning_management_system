@@ -76,21 +76,11 @@
                 
 
                   <template v-if="activeLesson.lesson_type === 'article'">
-                  <article 
-                    class="media"
-                    v-for="comment in comments" 
-                    v-bind:key="comment.id" 
-                  >
-
-                    <div class="media-content">
-                      <div class="content">
-                        <p>
-                          <strong>{{ comment.name }}</strong> {{ comment.created_at }}<br>
-                          {{ comment.content }}
-                        </p>
-                      </div>
-                    </div>
-                  </article>
+                    <CourseComment
+                      v-for="comment in comments" 
+                      v-bind:key="comment.id" 
+                      v-bind:comment="comment"
+                    />
 
                   <form @submit.prevent="submitComment">
                     <div class="field">
@@ -140,7 +130,12 @@
 <script>
 import axios from 'axios'
 
+import CourseComment from '@/components/CourseComment.vue';
+
 export default {
+  components: {
+    CourseComment,
+  },
   data() {
     return {
       course: null,
