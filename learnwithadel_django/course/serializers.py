@@ -32,6 +32,13 @@ class CommentsSerializer(serializers.ModelSerializer):
 
 
 class QuizSerializer(serializers.ModelSerializer):
+
+    options = serializers.SerializerMethodField()
+    
     class Meta:
         model = Quiz
-        fields = ('id', 'lesson_id', 'question', 'answer', 'op1', 'op2', 'op3')
+        fields = ('id', 'lesson_id', 'question', 'answer', 'options')
+
+    def get_options(self, obj):
+        options_list = [obj.op1, obj.op2, obj.op3]
+        return [opt for opt in options_list if opt]
