@@ -2,7 +2,7 @@
     <div class="courses">
         <div class="hero is-info">
             <div class="hero-body has-text-centered">
-                <h1 class="subtitle">Courses📖</h1>
+                <h1 class="title">Courses📖</h1>
                 <h2 class="subtitle">An Online place for learning what you want</h2>
             </div>
         </div>

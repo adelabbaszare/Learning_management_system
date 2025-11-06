@@ -40,38 +40,9 @@
 
                 <template v-if="activeLesson">
                   <template v-if="activeLesson.lesson_type === 'quiz'" >
-                    <h3>{{ quiz.question }}</h3>
-
-                    <div class="control">
-                      <label class="radio">
-                        <input type="radio" :value="quiz.op1" v-model="selectedAnswer">{{ quiz.op1 }}</input>
-                      </label>
-                    </div>
-
-                    <div class="control">
-                      <label class="radio">
-                        <input type="radio" :value="quiz.op2" v-model="selectedAnswer">{{ quiz.op2 }}</input>
-                      </label>
-                    </div>
-
-                    <div class="control">
-                      <label class="radio">
-                        <input type="radio" :value="quiz.op3" v-model="selectedAnswer">{{ quiz.op3 }}</input>
-                      </label>
-                    </div>
-
-                    <div class="control mt-4">
-                      <button class="button is-info" @click="sumbitQuiz">Submit</button>
-                    </div>
-
-                    <template v-if="quizResult == 'correct' ">
-                      <div class="notification is-success mt-4">Correct✅</div>
-                    </template>
-
-
-                    <template v-if="quizResult == 'incorrect' ">
-                      <div class="notification is-danger mt-4">Wrong❌, Please Try Again</div>
-                    </template>
+                    <Quiz
+                      v-bind:quiz="quiz"
+                    />
                   </template>
                 
 
@@ -116,11 +87,13 @@ import axios from 'axios'
 
 import CourseComment from '@/components/CourseComment.vue';
 import AddComment from '@/components/AddComment.vue';
+import Quiz from '@/components/Quiz.vue';
 
 export default {
   components: {
     CourseComment,
     AddComment,
+    Quiz,
   },
   data() {
     return {
@@ -131,9 +104,7 @@ export default {
       // comment: { name: '', content: '' },
       loading: false,
       error: null,
-      quiz: {},
-      selectedAnswer: '',
-      quizResult: null
+      quiz: {}
     }
   },
   computed: {
@@ -199,20 +170,6 @@ export default {
     submitComment(comment) {
       this.comments.push(comment)
 
-    },
-
-    sumbitQuiz() {
-      this.quizResult = null
-
-      if (this.selectedAnswer) {
-        if (this.selectedAnswer === this.quiz.answer) {
-          this.quizResult = 'correct'
-        } else {
-          this.quizResult = 'incorrect'
-        }
-      } else {
-        alert('Select Answer First')
-      }
     },
     setActiveLesson(lesson) {
       this.activeLesson = lesson

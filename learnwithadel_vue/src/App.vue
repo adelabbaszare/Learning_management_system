@@ -36,7 +36,7 @@ export default {
 
 <style lang="scss">
 @import '../node_modules/bulma';
-
+//@import '../src/assets/custom-bulma.scss';
 
 @keyframes heartbeat {
   0%, 20%, 40%, 60%, 80%, 100% {
