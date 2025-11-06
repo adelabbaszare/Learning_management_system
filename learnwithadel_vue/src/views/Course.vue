@@ -167,6 +167,11 @@ export default {
 
       this.activeLesson = (this.lessons && this.lessons.length) ? this.lessons[0] : null
 
+      // Load comments when open the course, if course is article
+      if (this.activeLesson && this.activeLesson.lesson_type === 'article') {
+          this.getComments() 
+      }
+
       document.title = this.course.title + ' | LearnwithAdel'
 
     } catch (err) {

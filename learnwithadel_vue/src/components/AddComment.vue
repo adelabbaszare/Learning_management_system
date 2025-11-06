@@ -71,7 +71,7 @@ export default {
                     this.comment.name = ''
                     this.comment.content = ''
 
-                    this.$emit('submitComment', response.data)
+                    this.$emit('submitComment', resp.data)
 
                     alert('The comment was added!')
 
