@@ -18,7 +18,7 @@
                                 <li>
                                     <a
                                         v-bind:class="{'is-active': !activeCategory}"
-                                        @click="setActiveCategory(null)"
+                                        @click.prevent="setActiveCategory(null)"
                                     >
                                         All Courses
                                     </a>
@@ -26,9 +26,11 @@
                                 <li
                                     v-for="category in categories"
                                     v-bind:key="category.id"
-                                    @click="setActiveCategory(category)"
+                                    @click.prevent="setActiveCategory(category)"
                                 >
-                                    <a>
+                                    <a
+                                        v-bind:class="{'is-active': activeCategory && activeCategory.id === category.id}"
+                                    >
                                         {{ category.title }}
                                     </a>
                                 </li>
@@ -106,7 +108,7 @@ export default {
         document.title = 'Courses | LearnwithAdel'
 
         await axios
-            .get('api/v1/courses/get_categories/')
+            .get('/api/v1/courses/get_categories/')
             .then(response => {
                 console.log(response.data)
 
