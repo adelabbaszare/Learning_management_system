@@ -27,16 +27,16 @@
                     </label>
                 </div>
 
-                <p v-if="submitAttempted && !selectedAnswer" class="help is-danger mt-3">
-                    لطفاً یک گزینه را انتخاب کنید.
+                <p v-if="submitAttempted && !selectedAnswer" class="help is-danger mt-3 is-size-0.5">
+                    لطفاً یک گزینه را انتخاب کنید
                 </p>
 
                 <div v-if="submitted" class="mt-4">
                     <div v-if="quizResult === 'correct'" class="notification is-success is-light">
-                        ✅ آفرین! پاسخ شما صحیح بود.
+                        ✅ آفرین! پاسخ شما صحیح بود
                     </div>
                     <div v-if="quizResult === 'incorrect'" class="notification is-danger is-light">
-                        ❌ متاسفانه پاسخ اشتباه بود.
+                        ❌ متاسفانه پاسخ اشتباه بود
                         <br>
                         <strong>پاسخ صحیح:</strong> {{ quiz.answer }}
                     </div>
@@ -87,11 +87,10 @@ export default {
             this.submitAttempted = true;
 
             if (!this.selectedAnswer) {
-                // به جای alert()، از نمایش پیام خطا در template استفاده می‌کنیم.
                 return;
             }
 
-            this.submitted = true; // وضعیت به "ثبت شده" تغییر می‌کند
+            this.submitted = true;
 
             if (this.selectedAnswer === this.quiz.answer) {
                 this.quizResult = 'correct';
@@ -100,23 +99,24 @@ export default {
             }
         },
         
-
         getOptionClass(option) {
+            
             if (!this.submitted) {
-                return 'has-cursor-pointer';            
+                let classes = 'has-cursor-pointer';
+                if (option === this.selectedAnswer) {
+                    
+                    classes += ' selected'; 
+                }
+                return classes;
             }
-
             if (option === this.quiz.answer) {
-                return 'has-text-success has-text-weight-bold correct-answer-style'; // سبز و ضخیم
+                return 'has-text-success has-text-weight-bold correct-answer-style'; 
             }
-
             if (option === this.selectedAnswer && this.quizResult === 'incorrect') {
                 return 'has-text-danger incorrect-answer-style'; 
             }
-
             return '';
         },
-
 
         nextQuestion() {
 
@@ -138,12 +138,15 @@ export default {
 }
 
 .option-label {
+    font-size: 1rem;
+    font-weight: 500;
     display: block;
     padding: 0.75em 2em;
     margin-bottom: 1em;
     border-radius: 8px;
     transition: background-color 0.2s ease;
     background-color: #fcfcfc;
+    box-shadow: 0 4px 6px rgba(101, 6, 104, 0.522);
 }
 
 
@@ -158,15 +161,21 @@ export default {
     background-color: transparent;
 }
 
-/* استایل‌دهی به دکمه‌های رادیویی غیرفعال */
-.radio[disabled] {
-    opacity: 0.7;
+.option-label:active {
+    transform: scale(0.98);
+}
+
+.option-label.selected {
+    background-color: #ae00ff; /* A distinct blue for selected items */
+    color: white;
+    border: 1.5px solid #ffffff;
 }
 
 .has-text-success {
     border: 2px solid #48c78e;
     background-color: #f6fdf9;
 }
+
 .has-text-danger {
     border: 2px solid #f14668;
     background-color: #fff5f7;
