@@ -78,8 +78,8 @@ def get_comments(request, course_slug, lesson_slug):
 @permission_classes([IsAuthenticated])
 def add_comment(request, course_slug, lesson_slug):
     data = request.data
-    name = data.get('name')
-    content = data.get('content')
+    name = request.data.get('name') or request.POST.get('name')
+    content = request.data.get('content') or request.POST.get('content')
 
     # validation
     if not name or not content:
