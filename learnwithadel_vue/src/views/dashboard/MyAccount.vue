@@ -2,7 +2,7 @@
   <div class="about">
     <div class="hero is-info">
       <div class="hero-body has-text-centered">
-        <h1 class="subtitle">My Account💻</h1>
+        <h1 class="title">My Account</h1>
 
         <h2 class="subtitle">Welcome to your Dashboard</h2>
       </div>
@@ -16,7 +16,7 @@
                     has-text-primary
                     has-text-centered"
                     >Your Active Courses 
-                    <i class="fas fa-archive">
+                    <i class="fa-solid fa-book-open">
               </i>
             </h2>
         </div>

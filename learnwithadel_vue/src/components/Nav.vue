@@ -15,7 +15,14 @@
         <div class="navbar-item">
           <div class="buttons">
             <template v-if="isAuthenticated">
-              <router-link to="/dashboard/my-account" class="button is-info">My Account</router-link>
+              <router-link to="/dashboard/my-account"
+                class="button is-info">My Account
+                  <i
+                    class="fa-regular fa-user mx-2"
+                    style="color: #4b0082;"
+                  >
+                  </i>
+              </router-link>
             </template>
 
             <template v-else>
