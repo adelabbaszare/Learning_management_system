@@ -20,6 +20,11 @@ export default {
 
   mounted() {
     document.title = 'Dashboard | LearnwithAdel'
+    axios
+      .get('activities/get_active_courses/')
+      .then(response => {
+        console.log(response.data)
+      })
   },
 
   methods: {
