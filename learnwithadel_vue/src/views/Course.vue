@@ -44,7 +44,12 @@
                       v-bind:quiz="quiz"
                     />
                   </template>
-                
+
+                  <template v-if="activeLesson.lesson_type === 'video'" >
+                    <Video
+                      v-bind:youtube_id="activeLesson.youtube_id"
+                    />
+                  </template>           
 
                   <template v-if="activeLesson.lesson_type === 'article'">
                     <CourseComment
@@ -88,12 +93,14 @@ import axios from 'axios'
 import CourseComment from '@/components/CourseComment.vue';
 import AddComment from '@/components/AddComment.vue';
 import Quiz from '@/components/Quiz.vue';
+import Video from '@/components/Video.vue';
 
 export default {
   components: {
     CourseComment,
     AddComment,
     Quiz,
+    Video,
   },
   data() {
     return {
