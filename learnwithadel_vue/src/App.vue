@@ -10,13 +10,13 @@ import Footer from './components/Footer.vue';
 import Nav from '@/components/Nav.vue';
 import './assets/custom-bulma.scss';
 
-axios.defaults.baseURL = 'http://localhost:8000'
+axios.defaults.baseURL = 'http://localhost:8000/api/v1/'
 export default {
   name: 'App',
   components: { Nav, Footer },
   created() {
 
-    const apiUrl = process.env.VUE_APP_API_URL || 'http://localhost:8000';
+    const apiUrl = process.env.VUE_APP_API_URL || 'http://localhost:8000/api/v1/';
 
     axios.defaults.baseURL = apiUrl;
 

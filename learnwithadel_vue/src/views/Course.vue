@@ -207,7 +207,7 @@ export default {
         return
       }
 
-      const url = `courses/${this.course.slug}/lessons/${this.activeLesson.slug}/comments/get-comments`
+      const url = `courses/${this.course.slug}/lessons/${this.activeLesson.slug}/comments/get-comments/`
       console.log('GET comments URL:', url)
 
       const token = localStorage.getItem('token')

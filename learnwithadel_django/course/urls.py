@@ -9,7 +9,7 @@ urlpatterns = [
     
     # comments endpoint (matches frontend)
     path('<slug:course_slug>/lessons/<slug:lesson_slug>/comments/', views.add_comment, name='course-lesson-comments'),
-    path('<slug:course_slug>/lessons/<slug:lesson_slug>/comments/get-comments', views.get_comments),
+    path('<slug:course_slug>/lessons/<slug:lesson_slug>/comments/get-comments/', views.get_comments),
     
 
     # quiz (put before course-detail)
