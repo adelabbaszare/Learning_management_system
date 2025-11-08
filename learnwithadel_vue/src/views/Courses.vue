@@ -108,7 +108,7 @@ export default {
         document.title = 'Courses | LearnwithAdel'
 
         await axios
-            .get('/api/v1/courses/get_categories/')
+            .get('courses/get_categories/')
             .then(response => {
                 console.log(response.data)
 
@@ -125,7 +125,7 @@ export default {
             this.getCourses()
         },
         getCourses(){
-            let url = '/api/v1/courses/'
+            let url = 'courses/'
 
             if (this.activeCategory) {
                 url += '?category_id=' + this.activeCategory.id

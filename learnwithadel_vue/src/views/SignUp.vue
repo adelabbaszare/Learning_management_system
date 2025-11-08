@@ -84,10 +84,10 @@ export default {
       }
 
       try {
-        const regResp = await axios.post('/api/v1/users/', formData)
+        const regResp = await axios.post('users/', formData)
 
         const loginPayload = { username: this.email, password: this.password }
-        const loginResp = await axios.post('/api/v1/token/login/', loginPayload)
+        const loginResp = await axios.post('token/login/', loginPayload)
 
         
         const token = loginResp.data.auth_token || loginResp.data.token || loginResp.data.key

@@ -56,7 +56,7 @@ export default {
                     return
                 }
 
-                const url = `/api/v1/courses/${this.$route.params.slug}/lessons/${this.activeLesson.slug}/comments/`
+                const url = `courses/${this.$route.params.slug}/lessons/${this.activeLesson.slug}/comments/`
                 console.log('POST URL:', url)
 
                 const token = localStorage.getItem('token')

@@ -125,7 +125,7 @@ export default {
     }
 
     try {
-      const resp = await axios.get(`/api/v1/courses/${slug}/`)
+      const resp = await axios.get(`courses/${slug}/`)
       console.log('course fetch', resp.data)
 
       if (resp.data && resp.data.course) {
@@ -151,7 +151,7 @@ export default {
         this.error = 'Course not found.'
       } else if (err.response && (err.response.status === 401 || err.response.status === 403)) {
         try {
-          const listResp = await axios.get('/api/v1/courses/')
+          const listResp = await axios.get('courses/')
           const found = listResp.data.find(c => c.slug === slug)
           if (found) this.course = found
           else this.error = 'Course not found.'
@@ -191,7 +191,7 @@ export default {
 
     getQuiz() {
       axios
-        .get (`/api/v1/courses/${this.course.slug}/lessons/${this.activeLesson.slug}/get-quiz/`)
+        .get (`courses/${this.course.slug}/lessons/${this.activeLesson.slug}/get-quiz/`)
         .then(response => {
           console.log(response.data)
 
@@ -207,7 +207,7 @@ export default {
         return
       }
 
-      const url = `/api/v1/courses/${this.course.slug}/lessons/${this.activeLesson.slug}/comments/get-comments`
+      const url = `courses/${this.course.slug}/lessons/${this.activeLesson.slug}/comments/get-comments`
       console.log('GET comments URL:', url)
 
       const token = localStorage.getItem('token')

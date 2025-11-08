@@ -79,7 +79,7 @@ export default {
 
       // توجه: اگر هنوز baseURL تنظیم نکردی، ممکنه لازم باشه آدرس کامل بزنی:
       // axios.post('http://localhost:8000/api/v1/token/login/', formData)
-      axios.post('/api/v1/token/login/', formData)
+      axios.post('token/login/', formData)
         .then(response => {
           // DRF token auth معمولاً auth_token برمی‌گرداند؛ اما بسته به بک‌اند ممکنه key متفاوت باشه
           const token = response.data.auth_token || response.data.token || response.data.key;
