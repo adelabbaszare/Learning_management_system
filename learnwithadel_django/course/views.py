@@ -53,17 +53,21 @@ def get_frontpage_courses(request):
 @permission_classes([])
 def get_course(request, slug):
     course = get_object_or_404(Course, slug=slug)
-    course_serializer = CourseDetailListSerializer(course)
     lesson_serializer = LessonListSerializer(course.lessons.all(), many=True)
 
+    course_serializer = CourseDetailListSerializer(course)
     course_data = course_serializer.data
 
-    data = {
+    # Optionally, remove sensitive fields for anonymous users
+    if not request.user.is_authenticated:
+        sensitive_fields = ['some_private_field', 'another_field']
+        for field in sensitive_fields:
+            course_data.pop(field, None)
+            
+    return Response({
         'course': course_data,
         'lesson': lesson_serializer.data
-    }
-
-    return Response(data)
+    })
 
 
 @api_view(['GET'])
