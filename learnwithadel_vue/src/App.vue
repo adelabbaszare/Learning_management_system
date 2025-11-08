@@ -8,6 +8,7 @@
 import axios from 'axios';
 import Footer from './components/Footer.vue';
 import Nav from '@/components/Nav.vue';
+import './assets/custom-bulma.scss';
 
 axios.defaults.baseURL = 'http://localhost:8000'
 export default {

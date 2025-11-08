@@ -1,5 +1,3 @@
-// 1. تعریف متغیرهای SCSS Bulma قبل از import
-$primary: hsl(284, 62%, 45%);
+$primary: hsl(171, 100%, 41%);
 
-// 2. import Bulma
-@import "~bulma/bulma";
+@import "bulma/bulma.scss";

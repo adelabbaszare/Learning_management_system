@@ -1,7 +1,7 @@
 <template>
     <div class="card mb-5">
         <header class="card-header">
-            <p class="card-header-title">
+            <p class="card-header-title is-size-4">
                 {{ quiz.question }}
             </p>
         </header>
@@ -27,7 +27,7 @@
                     </label>
                 </div>
 
-                <p v-if="submitAttempted && !selectedAnswer" class="help is-danger mt-3 is-size-0.5">
+                <p v-if="submitAttempted && !selectedAnswer" class="help is-danger mt-3 ">
                     لطفاً یک گزینه را انتخاب کنید
                 </p>
 
@@ -144,21 +144,22 @@ export default {
     padding: 0.75em 2em;
     margin-bottom: 1em;
     border-radius: 8px;
+    border: 1.4px solid #930dd1;
     transition: background-color 0.2s ease;
     background-color: #fcfcfc;
     box-shadow: 0 4px 6px rgba(101, 6, 104, 0.522);
 }
 
-
 .option-label:not([disabled]):hover {
     background-color: #ffffff;
     cursor: pointer;
+    border: 1.8px solid #930dd1;
 }
-
 
 .option-label[disabled]:hover {
     cursor: pointer;
     background-color: transparent;
+    border: 1.8px solid #ffffff;
 }
 
 .option-label:active {
@@ -166,7 +167,7 @@ export default {
 }
 
 .option-label.selected {
-    background-color: #ae00ff; /* A distinct blue for selected items */
+    background-color: #930dd1; /* A distinct blue for selected items */
     color: white;
     border: 1.5px solid #ffffff;
 }

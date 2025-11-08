@@ -2,7 +2,7 @@
   <div class="home">
     <div class="hero is-info is-medium">
       <div class="hero-body has-text-centered">
-        <h1 class="subtitle">Welcome to LearnwithAdel</h1>
+        <h1 class="title">Welcome to LearnwithAdel</h1>
 
 
         <h2 class="subtitle">An Online place for learning what you want</h2>
