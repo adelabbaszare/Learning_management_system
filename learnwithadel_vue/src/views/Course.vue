@@ -176,8 +176,9 @@ export default {
   methods: {
     submitComment(comment) {
       this.comments.push(comment)
-
     },
+
+
     setActiveLesson(lesson) {
       this.activeLesson = lesson
       console.log('setActiveLesson ->', lesson)
@@ -194,7 +195,19 @@ export default {
       // get comments for the selected lesson and article type, not quiz
       this.getComments()
       }
+
+      this.trackSatrted()
     },
+
+
+    trackSatrted() {
+      axios
+        .post(`activities/track_started/${this.$route.params.slug}/lessons/${this.activeLesson.slug}/`)
+        .then(response => {
+          console.log(response.data)
+        })
+    },
+
 
     getQuiz() {
       axios
