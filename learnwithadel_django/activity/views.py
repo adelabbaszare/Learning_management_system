@@ -59,8 +59,8 @@ def mark_as_done(request, course_slug, lesson_slug):
     lesson = Lesson.objects.get(slug=lesson_slug)
 
     activity = Activity.objects.get(
-        creted_by=rquest.user,
-        course=corse,
+        created_by=request.user,
+        course=course,
         lesson=lesson
     )
     activity.status = Activity.DONE

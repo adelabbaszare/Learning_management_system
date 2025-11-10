@@ -31,7 +31,15 @@
                 <template v-if="activeLesson">
                   <h2>{{ activeLesson.title }}</h2>
                   <!-- guard activity first -->
-                  <span class="tag is-warning" v-if="activity && activity.status === 'started'">Started</span>
+                  <span 
+                      class="tag is-warning" 
+                      v-if="activity && activity.status === 'started'" 
+                      @click="markAsDone"
+                    >
+                    Started (mark as done)
+                  </span>
+
+                  <span class="tag is-success" v-else>Done</span>
                 </template>
 
                 <!-- Introduction shown only when no activeLesson -->
@@ -218,7 +226,7 @@ export default {
     },
     
 
-    mark_as_done() {
+    markAsDone() {
       axios
         .post(`activities/mark_as_done/${this.$route.params.slug}/lessons/${this.activeLesson.slug}/`)
         .then(response => {
