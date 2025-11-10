@@ -22,15 +22,24 @@
 
           <div class="column is-10">
             <div v-if="loading">Loading...</div>
-
             <div v-else-if="error" class="notification is-danger">{{ error }}</div>
 
             <div v-else-if="course">
               <div v-if="isAuthenticated">
 
-                <h2 v-if="activeLesson">{{ activeLesson.title }}</h2>
-                <h2 v-else>Introduction</h2>
+                <!-- GROUPED: title + started tag -->
+                <template v-if="activeLesson">
+                  <h2>{{ activeLesson.title }}</h2>
+                  <!-- guard activity first -->
+                  <span class="tag is-warning" v-if="activity && activity.status === 'started'">Started</span>
+                </template>
 
+                <!-- Introduction shown only when no activeLesson -->
+                <template v-else>
+                  <h2>Introduction</h2>
+                </template>
+
+                <!-- descriptions -->
                 <div v-if="activeLesson && activeLesson.long_description" v-html="activeLesson.long_description"></div>
                 <div v-else-if="course.long_description" v-html="course.long_description"></div>
                 <div v-else-if="course.short_description">{{ course.short_description }}</div>
@@ -39,34 +48,31 @@
                 <hr />
 
                 <template v-if="activeLesson">
-                  <template v-if="activeLesson.lesson_type === 'quiz'" >
-                    <Quiz
-                      v-bind:quiz="quiz"
-                    />
+                  <template v-if="activeLesson.lesson_type === 'quiz'">
+                    <Quiz :quiz="quiz" />
                   </template>
 
-                  <template v-if="activeLesson.lesson_type === 'video'" >
-                    <Video
-                      v-bind:youtube_id="activeLesson.youtube_id"
-                    />
-                  </template>           
+                  <template v-if="activeLesson.lesson_type === 'video'">
+                    <Video :youtube_id="activeLesson.youtube_id" />
+                  </template>
 
                   <template v-if="activeLesson.lesson_type === 'article'">
                     <CourseComment
-                      v-for="comment in comments" 
-                      v-bind:key="comment.id" 
-                      v-bind:comment="comment"
+                      v-for="comment in comments"
+                      :key="comment.id"
+                      :comment="comment"
                     />
-
                     <AddComment
-                      v-bind:course="course"
-                      v-bind:activeLesson="activeLesson"
-                      v-on:submitComment="submitComment"
+                      :course="course"
+                      :activeLesson="activeLesson"
+                      @submitComment="submitComment"
                     />
                   </template>
-                </template>  
+                </template>
+
               </div>
 
+              <!-- preview / not authenticated -->
               <div v-else>
                 <h2>Preview</h2>
                 <p>{{ course.short_description || 'Preview not available.' }}</p>
@@ -76,14 +82,14 @@
               </div>
             </div>
 
-            <div v-else>
-              <p>No course data available.</p>
-            </div>
+          <div v-else>
+            <p>No course data available.</p>
           </div>
-
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+
   </div>
 </template>
 
@@ -111,7 +117,8 @@ export default {
       // comment: { name: '', content: '' },
       loading: false,
       error: null,
-      quiz: {}
+      quiz: {},
+      activity: {}
     }
   },
   computed: {
@@ -205,6 +212,19 @@ export default {
         .post(`activities/track_started/${this.$route.params.slug}/lessons/${this.activeLesson.slug}/`)
         .then(response => {
           console.log(response.data)
+
+          this.activity = response.data
+        })
+    },
+    
+
+    mark_as_done() {
+      axios
+        .post(`activities/mark_as_done/${this.$route.params.slug}/lessons/${this.activeLesson.slug}/`)
+        .then(response => {
+          console.log(response.data)
+
+          this.activity = response.data
         })
     },
 

@@ -52,3 +52,21 @@ def track_started(request, course_slug, lesson_slug):
     return Response(serializer.data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
 
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def mark_as_done(request, course_slug, lesson_slug):
+    course = Course.objects.get(slug=course_slug)
+    lesson = Lesson.objects.get(slug=lesson_slug)
+
+    activity = Activity.objects.get(
+        creted_by=rquest.user,
+        course=corse,
+        lesson=lesson
+    )
+    activity.status = Activity.DONE
+    activity.save()
+
+    serializer = ActivitySerializer(activity)
+
+    return Response(serializer.data)
+
