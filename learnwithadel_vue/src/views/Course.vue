@@ -2,7 +2,11 @@
   <div class="courses">
     <div class="hero is-info">
       <div class="hero-body has-text-centered">
-        <h1 class="title is-3 has-text-weight-bold" v-if="course">{{ course.title }}</h1>
+        <h1 class="title is-3 has-text-weight-bold" v-if="course">{{ course.title }} 
+          <p class="subtitle is-5 has-text-weight-bold">
+            Author : {{ course.created_by.first_name + '' + course.created_by.last_name }}
+          </p>
+        </h1>
         <h1 class="title is-3 has-text-weight-bold" v-else>Loading...</h1>
         <h2 class="subtitle">An Online place for learning what you want</h2>
       </div>
@@ -27,13 +31,13 @@
             <div v-else-if="course">
               <div v-if="isAuthenticated">
 
-                <!-- GROUPED: title + started tag -->
+                
                 <template v-if="activeLesson">
                   <h2>{{ activeLesson.title }}</h2>
-                  <!-- guard activity first -->
+                  
                   <span 
                       class="tag is-warning" 
-                      v-if="activity && activity.status === 'started'" 
+                      v-if="activity && activity.status === 'started'"
                       @click="markAsDone"
                     >
                     Started (mark as done)
@@ -42,12 +46,10 @@
                   <span class="tag is-success" v-else>Done</span>
                 </template>
 
-                <!-- Introduction shown only when no activeLesson -->
                 <template v-else>
                   <h2>Introduction</h2>
                 </template>
 
-                <!-- descriptions -->
                 <div v-if="activeLesson && activeLesson.long_description" v-html="activeLesson.long_description"></div>
                 <div v-else-if="course.long_description" v-html="course.long_description"></div>
                 <div v-else-if="course.short_description">{{ course.short_description }}</div>
@@ -80,7 +82,6 @@
 
               </div>
 
-              <!-- preview / not authenticated -->
               <div v-else>
                 <h2>Preview</h2>
                 <p>{{ course.short_description || 'Preview not available.' }}</p>
@@ -122,7 +123,6 @@ export default {
       lessons: [],
       comments: [],
       activeLesson: null,
-      // comment: { name: '', content: '' },
       loading: false,
       error: null,
       quiz: {},
@@ -160,7 +160,6 @@ export default {
 
       this.activeLesson = (this.lessons && this.lessons.length) ? this.lessons[0] : null
 
-      // Load comments when open the course, if course is article
       if (this.activeLesson && this.activeLesson.lesson_type === 'article') {
           this.getComments() 
       }
