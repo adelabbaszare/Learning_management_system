@@ -4,7 +4,7 @@
       <div class="hero-body has-text-centered">
         <h1 class="title is-3 has-text-weight-bold" v-if="course">{{ course.title }} 
           <p class="subtitle is-5 has-text-weight-bold">
-            Author : {{ course.created_by.first_name + '' + course.created_by.last_name }}
+            Author : {{ course.created_by.first_name + ' ' + course.created_by.last_name }}
           </p>
         </h1>
         <h1 class="title is-3 has-text-weight-bold" v-else>Loading...</h1>

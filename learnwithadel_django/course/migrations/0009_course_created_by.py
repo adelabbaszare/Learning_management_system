@@ -7,24 +7,19 @@ from django.db import migrations, models
 def set_created_by(apps, schema_editor):
     Course = apps.get_model('course', 'Course')
 
-    # خواندن نام مدل User از تنظیمات (مثلاً 'auth.User' یا 'myapp.CustomUser')
     user_model = settings.AUTH_USER_MODEL
     app_label, model_name = user_model.split('.', 1)
     User = apps.get_model(app_label, model_name)
 
-    # سعی می‌کنیم یوزر با pk=3 را استفاده کنیم (شما قبلاً pk=3 را دارید).
     try:
         user = User.objects.get(pk=3)
     except User.DoesNotExist:
-        # اگر نبود، اولین یوزر را برمی‌داریم (اگر هیچ یوزری نبود، کاری انجام نمی‌شود)
         user = User.objects.first()
 
     if user:
-        # برای هر کورسی که created_by خالی دارد، آن را پر می‌کنیم
         Course.objects.filter(created_by__isnull=True).update(created_by_id=user.pk)
 
 def noop(apps, schema_editor):
-    # در rollback کاری انجام نمی‌دهیم
     return
 
 class Migration(migrations.Migration):
@@ -35,7 +30,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # 1) اضافه کردن فیلد به صورت nullable (تا بدون خطای FK اضافه شود)
         migrations.AddField(
             model_name='course',
             name='created_by',
@@ -46,9 +40,7 @@ class Migration(migrations.Migration):
                 on_delete=django.db.models.deletion.CASCADE,
             ),
         ),
-        # 2) پر کردن رکوردهای موجود با یک یوزر معتبر
         migrations.RunPython(set_created_by, noop),
-        # 3) تغییر فیلد به non-nullable (اجباری)
         migrations.AlterField(
             model_name='course',
             name='created_by',
