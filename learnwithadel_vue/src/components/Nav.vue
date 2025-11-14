@@ -15,6 +15,16 @@
         <div class="navbar-item">
           <div class="buttons">
             <template v-if="isAuthenticated">
+
+              <router-link to="/dashboard/create-course"
+                class="button is-primary">Create Course
+                  <i
+                    class="fa-regular fa-user mx-2"
+                    style="color: #4b0082;"
+                  >
+                  </i>
+              </router-link>
+
               <router-link to="/dashboard/my-account"
                 class="button is-info">My Account
                   <i
@@ -41,7 +51,6 @@ import { mapState } from 'vuex'
 
 export default {
   computed: {
-    // امن و reactive
     ...mapState({
       isAuthenticated: state => state.user?.isAuthenticated || false
     })
