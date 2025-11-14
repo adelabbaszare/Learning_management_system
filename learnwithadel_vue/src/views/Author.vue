@@ -75,7 +75,7 @@ export default {
     methods: {
         getCourses(){
             axios
-                .get(`courses/get_author_courses/${this.$route.params.id}/`)
+                .get(`/courses/get_author_courses/${this.$route.params.id}/`)
                 .then(response => {
                     console.log(response.data)
 

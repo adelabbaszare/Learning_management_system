@@ -1,11 +1,13 @@
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 
 from .models import Course, Lesson, Comment, Category
-from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer, CommentsSerializer, CategorySerializer, QuizSerializer
+from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer, CommentsSerializer, CategorySerializer, QuizSerializer, UserSerializer
 
 
 @api_view(['GET'])
@@ -58,12 +60,6 @@ def get_course(request, slug):
     course_serializer = CourseDetailListSerializer(course)
     course_data = course_serializer.data
 
-    # Optionally, remove sensitive fields for anonymous users
-    if not request.user.is_authenticated:
-        sensitive_fields = ['some_private_field', 'another_field']
-        for field in sensitive_fields:
-            course_data.pop(field, None)
-            
     return Response({
         'course': course_data,
         'lesson': lesson_serializer.data
@@ -108,3 +104,18 @@ def add_comment(request, course_slug, lesson_slug):
     serializer = CommentsSerializer(comment)
 
     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_author_courses(request, user_id):
+    user = User.objects.get(pk=user_id)
+    courses = user.courses.all()
+
+    user_serializer = UserSerializer(user, many=False)
+    courses_serializer = CourseListSerializer(courses, many=True)
+
+    return Response({
+        'courses': courses_serializer.data,
+        'created_by': user_serializer.data
+    })

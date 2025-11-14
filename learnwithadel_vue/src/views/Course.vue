@@ -3,9 +3,11 @@
     <div class="hero is-info">
       <div class="hero-body has-text-centered">
         <h1 class="title is-3 has-text-weight-bold" v-if="course">{{ course.title }} 
-          <p class="subtitle is-5 has-text-weight-bold">
+          <router-link
+            :to="{name: 'Author', params: {id: course.created_by.id}}"
+            class="subtitle is-5 has-text-weight-bold">
             Author : {{ course.created_by.first_name + ' ' + course.created_by.last_name }}
-          </p>
+          </router-link>
         </h1>
         <h1 class="title is-3 has-text-weight-bold" v-else>Loading...</h1>
         <h2 class="subtitle">An Online place for learning what you want</h2>
@@ -119,7 +121,11 @@ export default {
   },
   data() {
     return {
-      course: null,
+      course: {
+        created_by: {
+          id: 0
+        }
+      },
       lessons: [],
       comments: [],
       activeLesson: null,

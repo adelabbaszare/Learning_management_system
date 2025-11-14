@@ -6,6 +6,8 @@ urlpatterns = [
     path('', views.get_courses, name='course-list'),
     path('get_frontpage_courses/', views.get_frontpage_courses, name='course-list-on-frontpage'),
     path('get_categories/', views.get_categories, name='categories-list'),
+
+    path('get_author_courses/<int:user_id>/', views.get_author_courses),
     
     # comments endpoint (matches frontend)
     path('<slug:course_slug>/lessons/<slug:lesson_slug>/comments/', views.add_comment, name='course-lesson-comments'),
