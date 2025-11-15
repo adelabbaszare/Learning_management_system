@@ -10,6 +10,14 @@ from .models import Course, Lesson, Comment, Category
 from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer, CommentsSerializer, CategorySerializer, QuizSerializer, UserSerializer
 
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_course(request):
+    print(request.data)
+
+    return Response({'yo': 'yo'})
+
+
 @api_view(['GET'])
 def get_quiz(reuest, course_slug, lesson_slug):
     lesson = Lesson.objects.get(slug=lesson_slug)
