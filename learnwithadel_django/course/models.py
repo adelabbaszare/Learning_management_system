@@ -27,6 +27,9 @@ class Course(models.Model):
     image = models.ImageField(upload_to='uploads', blank=True, null=True)
 
 
+    class Meta:
+        ordering = ('-created_at',)
+
     def __str__(self):
         return self.title
 
@@ -35,8 +38,6 @@ class Course(models.Model):
             return settings.WEBSITE_URL + self.image.url
         else:
             return 'https://bulma.io/assets/images/placeholders/1280x960.png'
-
-
 
 
 class Lesson(models.Model):
