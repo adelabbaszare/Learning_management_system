@@ -27,7 +27,7 @@
                 <div class="field">
                     <div class="control has-icons-left">
                         <div class="select">
-                            <select v-model="form.categories">
+                            <select v-model.number="form.categories">
                                 <option
                                 v-for="category in categories"
                                 v-bind:key="category.id"
@@ -93,13 +93,21 @@ export default {
       console.log('submitForm')
       console.log(this.form)
 
+      // normalize categories -> always an array (handles single id or already-array)
+      const payload = {
+        ...this.form,
+        categories: Array.isArray(this.form.categories)
+          ? this.form.categories
+          : (this.form.categories == null ? [] : [this.form.categories])
+      }
+
       axios
-        .post('courses/create/', this.form)
+        .post('courses/create/', payload)
         .then(response => {
-            console.log(response.data)
+          console.log(response.data)
         })
         .catch(error => {
-          console.error('failed to load categories', error)
+          console.error('failed to create course', error)
         })
     }
   }
