@@ -53,7 +53,7 @@ def get_categories(request):
 @permission_classes([])
 def get_courses(request):
     category_id = request.GET.get('category_id', '')
-    courses = Course.objects.all()
+    courses = Course.objects.filter(status=Course.PUBLISHED)
 
     if category_id:
         courses = courses.filter(categories__in=[int(category_id)])
@@ -66,7 +66,7 @@ def get_courses(request):
 @authentication_classes([])
 @permission_classes([])
 def get_frontpage_courses(request):
-    courses = Course.objects.all()[0:3]
+    courses = Course.objects.filter(status=Course.PUBLISHED)[0:3]
     serializer = CourseListSerializer(courses, many=True)
     return Response(serializer.data)
 
@@ -75,7 +75,7 @@ def get_frontpage_courses(request):
 @authentication_classes([])
 @permission_classes([])
 def get_course(request, slug):
-    course = get_object_or_404(Course, slug=slug)
+    course = get_object_or_404(Course.objects.filter(status=Course.PUBLISHED), slug=slug)
     lesson_serializer = LessonListSerializer(course.lessons.all(), many=True)
 
     course_serializer = CourseDetailListSerializer(course)
@@ -131,7 +131,7 @@ def add_comment(request, course_slug, lesson_slug):
 @permission_classes([AllowAny])
 def get_author_courses(request, user_id):
     user = User.objects.get(pk=user_id)
-    courses = user.courses.all()
+    courses = user.courses.filter(status=Course.PUBLISHED)
 
     user_serializer = UserSerializer(user, many=False)
     courses_serializer = CourseListSerializer(courses, many=True)
