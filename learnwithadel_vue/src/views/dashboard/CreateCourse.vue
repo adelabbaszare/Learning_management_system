@@ -94,12 +94,12 @@ export default {
       console.log(this.form)
 
       axios
-        .post('courses/create', this.form)
+        .post('courses/create/', this.form)
         .then(response => {
             console.log(response.data)
         })
-        .catch(err => {
-          console.error('failed to load categories', err)
+        .catch(error => {
+          console.error('failed to load categories', error)
         })
     }
   }

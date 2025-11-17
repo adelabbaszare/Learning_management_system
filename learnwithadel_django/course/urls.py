@@ -9,7 +9,7 @@ urlpatterns = [
 
     path('get_author_courses/<int:user_id>/', views.get_author_courses),
     
-    path('create_course/', views.create_course),
+    path('create/', views.create_course, name='course-create'),
 
     # comments endpoint (matches frontend)
     path('<slug:course_slug>/lessons/<slug:lesson_slug>/comments/', views.add_comment, name='course-lesson-comments'),

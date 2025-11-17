@@ -11,7 +11,7 @@ from .serializers import CourseListSerializer, CourseDetailListSerializer, Lesso
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def create_course(request):
     print(request.data)
 
