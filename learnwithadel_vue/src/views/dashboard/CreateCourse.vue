@@ -8,45 +8,44 @@
     </div>
 
         <section class="section">
-            <form v-on:submit.prevent="submitForm">
-                <div class="field">
-                    <label>Title</label>
-                    <input type="text" class="input" v-model="form.title"></input>
-                </div>
-                
-                <div class="field">
-                    <label>Short Description</label>
-                    <textarea class="textarea" v-model="form.short_description"></textarea>
-                </div>
-                
-                <div class="field">
-                    <label>Long Description</label>
-                    <textarea class="textarea" v-model="form.long_description"></textarea>
-                </div>
+              <div class="field">
+                  <label>Title</label>
+                  <input type="text" class="input" v-model="form.title"></input>
+              </div>
+              
+              <div class="field">
+                  <label>Short Description</label>
+                  <textarea class="textarea" v-model="form.short_description"></textarea>
+              </div>
+              
+              <div class="field">
+                  <label>Long Description</label>
+                  <textarea class="textarea" v-model="form.long_description"></textarea>
+              </div>
 
-                <div class="field">
-                    <div class="control has-icons-left">
-                        <div class="select">
-                            <select v-model.number="form.categories">
-                                <option
-                                v-for="category in categories"
-                                v-bind:key="category.id"
-                                v-bind:value="category.id"
-                                    selected
-                                >
-                                    {{category.title}}</option>
-                            </select>
-                        </div>
-                        <span class="icon is-left">
-                            <i class="fas fa-bookmark"></i>
-                        </span>
-                    </div>
-                </div>
+              <div class="field">
+                  <div class="control has-icons-left">
+                      <div class="select">
+                          <select v-model.number="form.categories">
+                              <option
+                              v-for="category in categories"
+                              v-bind:key="category.id"
+                              v-bind:value="category.id"
+                                  selected
+                              >
+                                  {{category.title}}</option>
+                          </select>
+                      </div>
+                      <span class="icon is-left">
+                          <i class="fas fa-bookmark"></i>
+                      </span>
+                  </div>
+              </div>
 
-                <div class="field">
-                    <button class="button is success">Submit</button>
-                </div>
-            </form>
+              <div class="field buttons">
+                  <button class="button is-success" @click="submitForm('draft')">Save as draft</button>
+                  <button class="button is-info" @click="submitForm('review')">Submit as review</button>
+              </div>
         </section>
     </div>
 </template>
@@ -63,6 +62,7 @@ export default {
         long_description: '',
         // single-select: store the selected category id (not an array)
         categories: null,
+        status: ''
       },
       categories: [],
     }
@@ -89,9 +89,11 @@ export default {
           console.error('failed to load categories', err)
         })
     },
-    submitForm() {
+    submitForm(status) {
       console.log('submitForm')
       console.log(this.form)
+
+      this.form.status = status
 
       // normalize categories -> always an array (handles single id or already-array)
       const payload = {

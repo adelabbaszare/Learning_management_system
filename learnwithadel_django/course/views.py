@@ -14,20 +14,23 @@ from .serializers import CourseListSerializer, CourseDetailListSerializer, Lesso
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_course(request):
-    print(request.data)
+    status = request.data.get('status')
 
+    if status == 'published':
+        status = 'draft'
+    
     course = Course.objects.create(
         title = request.data.get('title'),
         slug = slugify(request.data.get('title')),
         short_description = request.data.get('short_description'),
         long_description = request.data.get('long_description'),
+        status = status,
         created_by = request.user
     )
     for id in request.data.get('categories'):
         course.categories.add(id)
 
     course.save()
-    print(course)
     return Response({'yo': 'yo'})
 
 
