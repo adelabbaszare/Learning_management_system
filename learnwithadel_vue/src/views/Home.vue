@@ -9,6 +9,9 @@
           <a href="/sign-up" class="button is-info is-large is-rounded mt-4 shadow-button">
             <strong>Click to get started</strong>
           </a>
+
+          <CodeTypingAnimation />
+          
         </div>
       </div>
     </section>
@@ -59,12 +62,14 @@
 
 <script>
 import CourseItem from '@/components/CourseItem.vue';
+import CodeTypingAnimation from '@/components/CodeTypingAnimation.vue';
 import axios from 'axios'
 
 export default {
   name: 'Home',
   components: {
-    CourseItem
+    CourseItem,
+    CodeTypingAnimation
   },
   data() {
     return {
