@@ -221,6 +221,10 @@ export default {
 
 
     trackSatrted() {
+      const token = localStorage.getItem('token')
+      const headers = {}
+      if (token) headers['Authorization'] = 'Token ' + token
+
       axios
         .post(`activities/track_started/${this.$route.params.slug}/lessons/${this.activeLesson.slug}/`)
         .then(response => {
@@ -232,6 +236,10 @@ export default {
     
 
     markAsDone() {
+      const token = localStorage.getItem('token')
+      const headers = {}
+      if (token) headers['Authorization'] = 'Token ' + token
+      
       axios
         .post(`activities/mark_as_done/${this.$route.params.slug}/lessons/${this.activeLesson.slug}/`)
         .then(response => {

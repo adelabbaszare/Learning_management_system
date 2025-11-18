@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-
+from accounts.serializers import UserSerializer
 from .models import Course, Lesson, Comment, Category, Quiz
 
 User = get_user_model()
@@ -15,6 +15,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ('id', 'title', 'slug')
 
+
 class CourseListSerializer(serializers.ModelSerializer):
     get_image = serializers.SerializerMethodField()
     categories = CategorySerializer(many=True, read_only=True)
@@ -26,6 +27,7 @@ class CourseListSerializer(serializers.ModelSerializer):
 
     def get_get_image(self, obj):
         return obj.get_image()
+
 
 class CourseDetailListSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(many=False, read_only=True)
@@ -39,15 +41,18 @@ class CourseDetailListSerializer(serializers.ModelSerializer):
     def get_get_image(self, obj):
         return obj.get_image()
 
+
 class LessonListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = ('id', 'title', 'slug', 'lesson_type', 'short_description', 'long_description', 'youtube_id')
 
+
 class CommentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('id', 'name', 'content', 'created_at')
+
 
 class QuizSerializer(serializers.ModelSerializer):
     lesson_id = serializers.IntegerField(read_only=True)

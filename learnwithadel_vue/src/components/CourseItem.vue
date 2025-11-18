@@ -57,8 +57,8 @@
         </div>
 
         <div class="media-content">
-          <p class="title is-5">{{ course.title }}</p>
-          <p class="subtitle is-6 has-text-grey">{{ authorTitle }}</p>
+          <p class="title is-5 m-1">{{ course.title }}</p>
+          <p class="subtitle is-6 has-text-grey m-1">{{ authorTitle }}</p>
         </div>
       </div>
 
@@ -96,7 +96,6 @@
 </template>
 
 <script>
-// اگر قبلاً FontAwesome را گلوبال نصب نکردی، اینجا اضافه کن:
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faClock } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -172,7 +171,7 @@ export default {
     },
     authorImageSrc() {
       const u = this.course.created_by || {};
-      return u.avatar || u.image || u.profile_image || this.authorPlaceholder;
+      return u.image || this.authorPlaceholder;
     }
   },
   methods: {
@@ -194,7 +193,7 @@ export default {
   transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
   outline: none;
   border: 2px solid transparent;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 .course-card:focus,
 .course-card:hover {
@@ -209,6 +208,8 @@ export default {
   overflow: hidden;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 /* duration badge (top-left) */
@@ -312,4 +313,34 @@ export default {
 /* card footer */
 .card-footer { border-top: 1px solid rgba(10,10,10,0.05); }
 .card-footer-item { cursor: pointer; }
+
+/* --- اصلاحات برای ارتفاع استاندارد --- */
+
+/* 1. تنظیم Flexbox برای عنوان (محدود به دو خط) */
+.title-fixed-height {
+  /* تنظیم حداکثر تعداد خطوط برای عنوان */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* عنوان فقط 2 خط باشد */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* اطمینان از فضای کافی برای 2 خط عنوان و 1 خط زیرعنوان */
+  min-height: 2.5em; /* یا یک مقدار ثابت مناسب برای 2 خط متن */
+}
+
+/* 2. محدودیت توضیحات (از قبل 3 خط بود، اما برای تاکید دوباره قرار داده می‌شود) */
+.desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* توضیحات فقط 3 خط باشد */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* تعیین ارتفاع ثابت برای بلوک توضیحات */
+  min-height: 4.5em; /* مناسب برای 3 خط متن (حدود 1.5em در هر خط) */
+}
+
+/* 3. اطمینان از تراز بودن فوتر و متای کارت (برای زمانی که توضیحات کوتاه است) */
+.card-content > .content {
+    /* اگر این محتوا در یک Flex Container قرار داشته باشد، بهتر عمل می‌کند.
+       اما در حالت عادی، صرفاً تضمین می‌کنیم که عناصر مهم (Meta و Footer)
+       فضای مورد نیاز خود را داشته باشند. */
+}
 </style>

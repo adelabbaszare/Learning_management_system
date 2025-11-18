@@ -146,7 +146,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 from rest_framework.permissions import IsAuthenticated, AllowAny
 REST_FRAMEWORK = {
-    'DATETIME_FORMAT': '%d.%m.%Y %H:%M',
+    # 'DATETIME_FORMAT': '%d.%m.%Y %H:%M',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',

@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 
 from rest_framework.response import Response
@@ -10,19 +11,7 @@ from rest_framework import status
 from .models import Course, Lesson, Comment, Category
 from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer, CommentsSerializer, CategorySerializer, QuizSerializer, UserSerializer
 
-
-from django.shortcuts import get_object_or_404
-from django.contrib.auth.models import User
-from django.utils.text import slugify
-
-from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework import status
-
-from .models import Course, Lesson, Comment, Category
-from .serializers import CourseListSerializer, CourseDetailListSerializer, LessonListSerializer, CommentsSerializer, CategorySerializer, QuizSerializer, UserSerializer
-
+User = get_user_model()
 
 def generate_unique_slug(model, value, slug_field='slug', queryset=None):
     """
@@ -45,10 +34,7 @@ def generate_unique_slug(model, value, slug_field='slug', queryset=None):
 @permission_classes([IsAuthenticated])
 def create_course(request):
     incoming_status = request.data.get('status')
-    # If client sets 'published', force draft first (your original business rule)
-    """ if incoming_status == 'published':
-        incoming_status = 'draft' """
-
+    # If client sets 'published', force draft first
     title = (request.data.get('title') or '').strip()
     short_description = request.data.get('short_description') or ''
     long_description = request.data.get('long_description') or ''
@@ -121,7 +107,7 @@ def get_quiz(request, course_slug, lesson_slug):
 
 @api_view(['GET'])
 @authentication_classes([])
-@permission_classes([])
+@permission_classes([AllowAny])
 def get_categories(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
@@ -130,7 +116,7 @@ def get_categories(request):
 
 @api_view(['GET'])
 @authentication_classes([])
-@permission_classes([])
+@permission_classes([AllowAny])
 def get_courses(request):
     category_id = request.GET.get('category_id', '')
     # prefetch categories reduces DB queries and provides category objects to serializer
@@ -145,16 +131,16 @@ def get_courses(request):
 
 @api_view(['GET'])
 @authentication_classes([])
-@permission_classes([])
+@permission_classes([AllowAny])
 def get_frontpage_courses(request):
-    courses = Course.objects.filter(status=Course.PUBLISHED)[0:3]
+    courses = Course.objects.filter(status=Course.PUBLISHED)[0:4]
     serializer = CourseListSerializer(courses, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @authentication_classes([])
-@permission_classes([])
+@permission_classes([AllowAny])
 def get_course(request, slug):
     course = get_object_or_404(Course.objects.filter(status=Course.PUBLISHED), slug=slug)
     lesson_serializer = LessonListSerializer(course.lessons.all(), many=True)
@@ -211,7 +197,7 @@ def add_comment(request, course_slug, lesson_slug):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_author_courses(request, user_id):
-    user = User.objects.get(pk=user_id)
+    user = get_object_or_404(User, pk=user_id)
     courses = user.courses.filter(status=Course.PUBLISHED)
 
     user_serializer = UserSerializer(user, many=False)
