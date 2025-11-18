@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -34,9 +33,9 @@ class Course(models.Model):
     short_description = models.TextField(blank=True, null=True)
     long_description = models.TextField(blank=True, null=True)
     created_at = models.DateField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='courses', on_delete=models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='courses', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='uploads', blank=True, null=True)
-    status = models.CharField(max_length=25, choices=STATUS_CHOICES, default=DRAFT )
+    status = models.CharField(max_length=25, choices=STATUS_CHOICES, default=DRAFT)
 
     class Meta:
         ordering = ('-created_at',)
@@ -93,7 +92,7 @@ class Comment(models.Model):
     name = models.CharField(max_length=255)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comments', on_delete=models.CASCADE)
 
 
 class Quiz(models.Model):
