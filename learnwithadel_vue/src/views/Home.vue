@@ -11,7 +11,7 @@
           </a>
 
           <CodeTypingAnimation />
-          
+
         </div>
       </div>
     </section>
@@ -100,7 +100,7 @@ export default {
 <style scoped>
 /* --- Hero Styles (از مرحله قبل) --- */
 .hero.has-background-image {
-    background: url('https://images.unsplash.com/photo-1501504905252-473c47e087f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1334&q=80') center center no-repeat;
+    background: url('https://static.vecteezy.com/system/resources/previews/067/865/560/non_2x/millimeter-graph-paper-grid-technical-and-educational-template-for-engineering-math-and-design-vector.jpg') center center no-repeat;
     background-size: cover;
     position: relative;
 }

@@ -7,7 +7,7 @@
           <div class="dot yellow"></div>
           <div class="dot green"></div>
         </div>
-        <div class="file-name">developer.js</div>
+        <div class="file-name"></div>
       </div>
 
       <div class="code-body">
@@ -24,19 +24,19 @@ export default {
   name: "CodeTypingAnimation",
   data() {
     return {
-      codeSnippet: 
-`const coder = {
-  name: 'Adel Zare',
-  skills: ['Python', 'Django', 'React'],
-  hardWorker: true,
-  problemSolver: true,
-  hireable: function() {
-    return (
-      this.hardWorker &&
-      this.problemSolver &&
-      this.skills.length >= 5
-    );
-  }
+      codeSnippet:
+    `const coder = {
+    name: 'Adel Zare',
+    skills: ['Python', 'Django', 'React'],
+    hardWorker: true,
+    problemSolver: true,
+    hireable: function() {
+        return (
+        this.hardWorker &&
+        this.problemSolver &&
+        this.skills.length >= 5
+        );
+    }
 };`,
       typedCode: '',
       intervalId: null,
@@ -182,11 +182,6 @@ pre {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
-
-/* !!! استایل‌های Syntax Highlighting !!!
-   نکته مهم: استفاده از ::v-deep (در Vue 2) یا :deep() (در Vue 3)
-   الزامی است تا روی HTML تزریق شده اعمال شود.
-*/
 
 ::v-deep .token-keyword { color: #c678dd; font-weight: bold; } /* بنفش (const, function) */
 ::v-deep .token-this { color: #e06c75; font-style: italic; }   /* قرمز (this) */

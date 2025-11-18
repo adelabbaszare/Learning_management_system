@@ -34,7 +34,6 @@ export default {
 </script>
 
 
-
 <style lang="scss">
 @import '../node_modules/bulma';
 //@import '../src/assets/custom-bulma.scss';
@@ -58,4 +57,29 @@ export default {
   margin-bottom: 0.5rem;
   font-size: 1.1rem;
 }
-</style>
+
+body {
+    /* ---------------------------------------------------------------------- */
+    /* ۱. انتخاب پس‌زمینه مورد نظر شما */
+    /* ---------------------------------------------------------------------- */
+    
+    /* مثال ۱: رنگ ثابت */
+    /* background-color: #f8f8f8; */
+    
+    /* مثال ۲: گرادیانت ملایم */
+    background-image: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+    
+    /* مثال ۳: تصویر پس‌زمینه */
+    background-image: url('https://img.freepik.com/free-vector/abstract-perspective-grid-lines-black-background_1017-47349.jpg?semt=ais_incoming&w=740&q=80');
+    background-size: cover;          
+    background-position: center center;
+    background-attachment: fixed;    
+    background-repeat: no-repeat;
+    
+    
+
+    min-height: 100vh; /* حداقل ارتفاع را معادل ارتفاع ویوپورت تنظیم می‌کند */
+    margin: 0;
+    padding: 0;
+  }
+  </style>
