@@ -111,7 +111,6 @@ def create_course(request):
     return Response({'course_id': course.id, 'slug': course.slug}, status=status.HTTP_201_CREATED)
 
 
-
 @api_view(['GET'])
 def get_quiz(request, course_slug, lesson_slug):
     lesson = Lesson.objects.get(slug=lesson_slug)
@@ -134,7 +133,8 @@ def get_categories(request):
 @permission_classes([])
 def get_courses(request):
     category_id = request.GET.get('category_id', '')
-    courses = Course.objects.filter(status=Course.PUBLISHED)
+    # prefetch categories reduces DB queries and provides category objects to serializer
+    courses = Course.objects.filter(status=Course.PUBLISHED).prefetch_related('categories')
 
     if category_id:
         courses = courses.filter(categories__in=[int(category_id)])
