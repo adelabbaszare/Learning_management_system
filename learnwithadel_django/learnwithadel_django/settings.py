@@ -44,8 +44,11 @@ INSTALLED_APPS = [
     'corsheaders',
     'djoser',
     'course',
-    'activity'
+    'activity',
+    'accounts'
 ]
+
+AUTH_USER_MODEL = 'accounts.User'
 
 CSRF_COOKIE_SECURE = False
 CORS_ALLOW_ALL_ORIGINS = False  
