@@ -12,43 +12,66 @@
         
         <div class="columns is-centered mb-6">
           <div class="column is-8">
-            <div class="box profile-box has-background-light">
-              <div class="media">
+            
+            <article class="panel is-primary profile-panel">
+              <p class="panel-heading is-size-5 has-text-weight-semibold">
+                <i class="fa-solid fa-user-circle mr-2"></i> Profile Overview
+              </p>
+              
+              <div class="panel-block media is-align-items-center p-4">
                 <div class="media-left">
                   <figure class="image is-128x128">
                     <img :src="user.image" alt="Profile Picture" class="is-rounded profile-image">
                   </figure>
                 </div>
-                <div class="media-content">
-                  <p class="title is-4 has-text-black">{{ user.first_name }} {{ user.last_name || user.username }}</p>
-                  <p class="subtitle is-6 has-text-grey">Email: {{ user.email }}</p>
-                  <p class="subtitle is-6 has-text-grey">Username: {{ user.username }}</p>
-
-                  <span v-if="user.is_instructor" class="tag is-primary is-light is-medium mb-1">
-                    <i class="fa-solid fa-graduation-cap mr-1"></i>
-                    Author
-                  </span>
-
-                  <span v-else="user.is_instructor" class="tag is-secondary is-light is-medium mb-1">
-                    <i class="fa-solid fa-graduation-cap mr-1"></i>
-                    Student
-                  </span>
-
-                  <p class="content bio-text">
-                    Bio: {{ user.bio || 'No bio available yet. Update your profile!' }}
-                  </p>
+                <div class="media-content has-text-left ml-4">
+                  <p class="title is-4 mb-1 has-text-black">{{ user.first_name }} {{ user.last_name || user.username }}</p>
                   
-                  <div class="buttons mt-4">
-                    <router-link to="/edit-profile" class="button is-info is-light is-small">
-                      <i class="fa-solid fa-pen mr-1"></i> Edit Profile
-                    </router-link>
-                    <button @click="logout()" class="button is-danger is-small">
-                      <i class="fa-solid fa-right-from-bracket mr-1"></i> Log Out
-                    </button>
-                  </div>
+                  <span v-if="user.is_instructor" class="tag is-primary is-medium mb-1">
+                    <i class="fa-solid fa-graduation-cap mr-1"></i> Author
+                  </span>
+                  <span v-else class="tag is-info is-medium mb-1">
+                    <i class="fa-solid fa-user-graduate mr-1"></i> Student
+                  </span>
                 </div>
               </div>
-            </div>
+
+              <p class="panel-tabs has-text-weight-bold">
+                <a class="is-active">Details</a>
+                <a>Actions</a>
+              </p>
+              
+              <a class="panel-block">
+                <span class="panel-icon">
+                  <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                </span>
+                Email: <strong class="ml-2">{{ user.email }}</strong>
+              </a>
+              
+              <a class="panel-block">
+                <span class="panel-icon">
+                  <i class="fa-solid fa-id-card" aria-hidden="true"></i>
+                </span>
+                Username: <strong class="ml-2">{{ user.username }}</strong>
+              </a>
+
+              <div class="panel-block is-block">
+                <p class="subtitle is-7 has-text-grey mb-1">Bio:</p>
+                <p class="content bio-text pt-1 pb-1">
+                  {{ user.bio || 'No bio available yet. Update your profile!' }}
+                </p>
+              </div>
+
+              <div class="panel-block buttons is-justify-content-space-between pt-4 pb-4">
+                <router-link to="/edit-profile" class="button is-info is-light is-fullwidth mr-2">
+                  <i class="fa-solid fa-pen mr-1"></i> Edit Profile
+                </router-link>
+                <button @click="logout()" class="button is-danger is-fullwidth ml-2">
+                  <i class="fa-solid fa-right-from-bracket mr-1"></i> Log Out
+                </button>
+              </div>
+            </article>
+
           </div>
         </div>
         
@@ -78,6 +101,7 @@
 </template>
 
 <script>
+
 import axios from 'axios'
 import CourseItem from '@/components/CourseItem.vue'
 
@@ -111,7 +135,6 @@ export default {
       
       try {
         const response = await axios.get(meUrl)
-        
         this.user = response.data
         
       } catch (error) {
@@ -147,18 +170,18 @@ export default {
     object-fit: cover;
     width: 128px;
     height: 128px;
-    border: 3px solid #7600d1;
+    border: 3px solid #00d1b2;
 }
 
-.profile-box {
-    box-shadow: 0 4px 6px rgba(10, 10, 10, 0.1);
-    padding: 1.5rem;
+.profile-panel {
     border-radius: 8px;
 }
 
 .bio-text {
     white-space: pre-wrap;
-    font-style: italic;
     color: #4a4a4a;
+}
+.panel-block {
+    padding: 0.75em 1em;
 }
 </style>
