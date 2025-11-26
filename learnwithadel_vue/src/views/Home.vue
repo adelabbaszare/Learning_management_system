@@ -98,64 +98,59 @@ export default {
 </script>
 
 <style scoped>
-/* --- Hero Styles (از مرحله قبل) --- */
-.hero.has-background-image {
+/*.hero.has-background-image {
     background: url('https://static.vecteezy.com/system/resources/previews/067/865/560/non_2x/millimeter-graph-paper-grid-technical-and-educational-template-for-engineering-math-and-design-vector.jpg') center center no-repeat;
     background-size: cover;
     position: relative;
+}*/
+.hero.has-background-color {
+  background: rgba(0, 0, 0, 0.792);
 }
 .hero-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.792);
+    background-color: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
 }
 .relative-z { position: relative; z-index: 1; }
 
-/* --- Marquee Animation Styles (بخش جدید) --- */
-
-/* جلوگیری از اسکرول افقی صفحه اصلی */
 .overflow-hidden {
     overflow: hidden;
 }
 
 .marquee-wrapper {
     width: 100%;
-    overflow: hidden; /* مخفی کردن آیتم‌هایی که از کادر خارج می‌شوند */
+    overflow: hidden;
     position: relative;
-    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); /* افکت محو شدن در لبه‌ها */
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
     -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
 }
 
 .marquee-track {
     display: flex;
-    width: max-content; /* عرض به اندازه محتوا باز می‌شود */
-    gap: 2rem; /* فاصله بین آیتم‌ها */
-    padding: 1rem 0;
-    /* انیمیشن: نام، مدت زمان، مدل حرکت، تکرار */
-    animation: scroll-left 40s linear infinite; 
+    width: max-content; 
+    gap: 2rem;
+    padding: 2rem 0;
+    animation: scroll-left 20s linear infinite; 
 }
 
-/* توقف حرکت وقتی موس روی آیتم‌هاست */
 .marquee-track:hover {
     animation-play-state: paused;
 }
 
 .marquee-item {
-    width: 300px; /* عرض ثابت برای هر کارت دوره */
-    flex-shrink: 0; /* جلوگیری از جمع شدن کارت‌ها */
+    width: 300px;
+    flex-shrink: 0;
 }
 
-/* تعریف انیمیشن */
 @keyframes scroll-left {
     0% {
         transform: translateX(0);
     }
     100% {
-        /* حرکت به اندازه منفی 50 درصد (چون محتوا دو بار تکرار شده، 50 درصد یعنی پایان سری اول) */
         transform: translateX(-50%); 
     }
 }
 
-/* ریسپانسیو: در موبایل سرعت کمی بیشتر باشد یا سایز تغییر کند */
 @media screen and (max-width: 768px) {
     .marquee-item {
         width: 260px;

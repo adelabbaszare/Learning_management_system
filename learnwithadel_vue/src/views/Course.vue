@@ -77,7 +77,7 @@
                     <AddComment
                       :course="course"
                       :activeLesson="activeLesson"
-                      @submitComment="submitComment"
+                      :isAuthenticated="isAuthenticated"   :currentUser="currentUser"         @submitComment="submitComment"
                     />
                   </template>
                 </template>
@@ -138,6 +138,9 @@ export default {
   computed: {
     isAuthenticated() {
       return this.$store?.state?.user?.isAuthenticated || false
+    },
+    currentUser() {
+    return this.$store?.state?.user || {} 
     }
   },
 

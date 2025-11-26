@@ -25,7 +25,7 @@
                   </figure>
                 </div>
                 <div class="media-content has-text-left ml-4">
-                  <p class="title is-4 mb-1 has-text-black">{{ user.first_name }} {{ user.last_name || user.username }}</p>
+                  <p class="title is-4 mb-1 has-text-white">{{ user.first_name }} {{ user.last_name || user.username }}</p>
                   
                   <span v-if="user.is_instructor" class="tag is-primary is-medium mb-1">
                     <i class="fa-solid fa-graduation-cap mr-1"></i> Author
@@ -135,11 +135,8 @@ export default {
       
       try {
         const response = await axios.get(meUrl)
-
         this.$store.commit('setUserData', response.data);
-
         this.user = this.$store.state.user
-        
       } catch (error) {
         console.error('Failed to load user details. Redirecting to login.', error)
         this.$router.push('/log-in') 
