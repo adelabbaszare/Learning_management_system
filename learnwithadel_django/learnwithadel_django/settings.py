@@ -45,8 +45,29 @@ INSTALLED_APPS = [
     'djoser',
     'course',
     'activity',
-    'accounts'
+    'accounts',
+    'ckeditor',
+    'ckeditor_uploader'
 ]
+
+from django.urls import reverse_lazy
+from django.conf import settings
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': '100%',
+        'codeSnippet_theme': 'monokai',
+        'filebrowserUploadUrl': settings.WEBSITE_URL + '/ckeditor/upload/', 
+        'filebrowserBrowseUrl': settings.WEBSITE_URL + '/ckeditor/browse/',
+        'extraPlugins': ','.join([
+            'uploadimage', 
+            'codesnippet',
+        ]),
+    },
+}
 
 AUTH_USER_MODEL = 'accounts.User'
 

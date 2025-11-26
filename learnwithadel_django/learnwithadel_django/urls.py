@@ -10,7 +10,8 @@ urlpatterns = [
     path('api/v1/', include('djoser.urls.authtoken')),
     path('api/v1/courses/', include('course.urls')),
     path('api/v1/activities/', include('activity.urls')),
-    path('api/v1/accounts/', include('accounts.urls'))
+    path('api/v1/accounts/', include('accounts.urls')),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
 if settings.DEBUG:

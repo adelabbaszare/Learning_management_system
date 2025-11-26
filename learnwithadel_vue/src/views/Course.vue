@@ -293,3 +293,19 @@ export default {
   }
 }
 </script>
+
+<style>
+@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css');
+
+.content pre {
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 6px;
+}
+
+.content pre code {
+  background-color: transparent !important; 
+  color: unset !important; 
+  padding: 0;
+}
+</style>

@@ -5,6 +5,7 @@ import store from './store'
 
 import axios from 'axios'
 import './assets/custom-bulma.scss';
+import 'highlight.js/styles/monokai.css';
 
 const api = axios.create({
   baseURL: "http://localhost:8000/api/v1/",

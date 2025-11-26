@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from ckeditor_uploader.fields import RichTextUploadingField 
 
 
 class Category(models.Model):
@@ -30,8 +31,8 @@ class Course(models.Model):
     categories = models.ManyToManyField(Category)
     title = models.CharField(max_length = 255)
     slug = models.SlugField(unique=True)
-    short_description = models.TextField(blank=True, null=True)
-    long_description = models.TextField(blank=True, null=True)
+    short_description = RichTextUploadingField(blank=True, null=True)
+    long_description = RichTextUploadingField(blank=True, null=True)
     created_at = models.DateField(auto_now_add=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='courses', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='uploads', blank=True, null=True)
@@ -72,8 +73,8 @@ class Lesson(models.Model):
     course = models.ForeignKey(Course, related_name='lessons', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
-    short_description = models.TextField(blank=True, null=True)
-    long_description = models.TextField(blank=True, null=True)
+    short_description = RichTextUploadingField(blank=True, null=True)
+    long_description = RichTextUploadingField(blank=True, null=True)
     status = models.CharField(max_length=20, choices=CHOICES_STATUS, default=PUBLISHED)
     lesson_type = models.CharField(max_length=20, choices=CHOICES_LESSON_TYPE, default=ARTICLE)
     youtube_id = models.CharField(max_length=20, blank=True, null=True)
