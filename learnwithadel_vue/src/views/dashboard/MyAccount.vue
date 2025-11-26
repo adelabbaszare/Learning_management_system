@@ -135,7 +135,10 @@ export default {
       
       try {
         const response = await axios.get(meUrl)
-        this.user = response.data
+
+        this.$store.commit('setUserData', response.data);
+
+        this.user = this.$store.state.user
         
       } catch (error) {
         console.error('Failed to load user details. Redirecting to login.', error)

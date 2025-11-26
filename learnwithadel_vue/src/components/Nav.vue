@@ -16,7 +16,7 @@
           <div class="buttons">
             <template v-if="isAuthenticated">
 
-              <router-link to="/dashboard/create-course"
+              <router-link v-if="isInstructor" to="/dashboard/create-course"
                 class="button is-primary">Create Course
                   <i
                     class="fa-regular fa-user mx-2"
@@ -52,7 +52,8 @@ import { mapState } from 'vuex'
 export default {
   computed: {
     ...mapState({
-      isAuthenticated: state => state.user?.isAuthenticated || false
+      isAuthenticated: state => state.user?.isAuthenticated || false,
+      isInstructor: state => state.user?.is_instructor || false
     })
   }
 }
