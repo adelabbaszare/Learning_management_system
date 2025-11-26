@@ -34,7 +34,7 @@ def track_started(request, course_slug, lesson_slug):
         created_by=request.user, 
         course=course, 
         lesson=lesson
-    ).first()  # Use `first()` to get one or `None` if no record exists
+        ).first()  # Use `first()` to get one or `None` if no record exists
 
     if not activity:
         # If no activity exists, create one

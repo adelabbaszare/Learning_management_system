@@ -94,6 +94,9 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comments', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.name
+
 
 class Quiz(models.Model):
     lesson = models.ForeignKey(Lesson, related_name='quizzes', on_delete=models.CASCADE)
@@ -105,3 +108,6 @@ class Quiz(models.Model):
 
     class Meta:
         verbose_name_plural = 'Quizzes'
+
+    def __str__(self):
+        return self.question

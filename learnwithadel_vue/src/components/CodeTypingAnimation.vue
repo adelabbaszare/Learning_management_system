@@ -24,20 +24,20 @@ export default {
   name: "CodeTypingAnimation",
   data() {
     return {
-      codeSnippet:
-    `const coder = {
+      codeSnippet:`
+    const coder = {
     name: 'Adel Zare',
     skills: ['Python', 'Django', 'React'],
     hardWorker: true,
     problemSolver: true,
     hireable: function() {
         return (
-        this.hardWorker &&
-        this.problemSolver &&
-        this.skills.length >= 5
-        );
-    }
-};`,
+            this.hardWorker &&
+            this.problemSolver &&
+            this.skills.length >= 5
+            );
+        }
+    };`,
       typedCode: '',
       intervalId: null,
       timeoutId: null,
@@ -112,7 +112,7 @@ export default {
 /* 2. پنجره کد (شبیه VS Code) */
 .code-window {
   width: 100%;
-  max-width: 600px; /* عرض مناسب */
+  max-width: 500px; /* عرض مناسب */
   background-color: #282c34; /* رنگ پس زمینه One Dark */
   border-radius: 8px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.5);
@@ -125,7 +125,7 @@ export default {
   display: flex;
   align-items: center;
   background-color: #21252b;
-  padding: 10px 15px;
+  padding: 5px 15px;
   border-bottom: 1px solid #181a1f;
 }
 
@@ -152,7 +152,7 @@ export default {
   
   /* !!! حل مشکل پرش !!! */
   height: 380px; /* ارتفاع ثابت: باعث می‌شود صفحه بالا پایین نرود */
-  overflow-y: auto; /* اگر متن بیشتر شد اسکرول بخورد */
+  /* overflow-y: auto; /* اگر متن بیشتر شد اسکرول بخورد */
   
   /* !!! حل مشکل راست‌چین !!! */
   direction: ltr !important;
@@ -162,7 +162,7 @@ export default {
 pre {
   margin: 0;
   background: transparent;
-  color: #abb2bf; /* رنگ پیش‌فرض متن */
+  color: #ffffff; /* رنگ پیش‌فرض متن */
   font-size: 15px;
   line-height: 1.6;
   white-space: pre-wrap;

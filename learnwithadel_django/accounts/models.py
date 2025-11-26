@@ -11,5 +11,5 @@ class User(AbstractUser):
         if self.image:
             base = getattr(settings, 'WEBSITE_URL', '')
             return base + self.image.url if base else self.image.url
-        return '/static/img/default-user.png'  # یا هر placeholder
+        return '/static/img/default-user.png'
 
