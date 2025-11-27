@@ -51,31 +51,62 @@
 
                 
                 <template v-if="activeLesson">
-                  <h2>{{ activeLesson.title }}</h2>
                   
-                  <span 
-                      class="tag is-warning" 
-                      v-if="activity && activity.status === 'started'"
-                      @click="markAsDone"
-                    >
-                    Started (mark as done)
-                  </span>
+                  <!-- نوار عنوان و ابزار (Action Bar) جدید -->
+                  <div class="is-flex is-justify-content-space-between is-align-items-center mb-4">
+                      <h2>{{ activeLesson.title }}</h2>
+                      
+                      <div class="buttons is-flex is-align-items-center">
+                          <!-- دکمه وضعیت (Mark as Done) -->
+                          <span 
+                              class="tag is-small is-rounded is-clickable mr-3" 
+                              :class="{'is-warning': activity && activity.status === 'started', 'is-success': activity && activity.status === 'done'}"
+                              @click="markAsDone"
+                              v-if="activity"
+                              style="line-height: 24px;"
+                          >
+                            {{ activity && activity.status === 'started' ? 'شروع شده (بزن برای اتمام)' : 'تکمیل شده' }}
+                          </span>
+                          
+                          <!-- آیکون گیت‌هاب -->
+                          <a href="#" target="_blank" title="مشاهده کد در گیت‌هاب" class="action-icon">
+                              <span class="icon is-medium">
+                                  <i class="fab fa-github"></i>
+                              </span>
+                          </a>
 
-                  <span class="tag is-success" v-else>Done</span>
+                          <!-- آیکون گوگل کولب (Notebook) -->
+                          <a href="#" target="_blank" title="اجرای نوت‌بوک در Google Colab" class="action-icon">
+                              <span class="icon is-medium">
+                                  <i class="fas fa-laptop-code"></i>
+                              </span>
+                          </a>
+
+                          <!-- آیکون اشتراک‌گذاری -->
+                          <a href="#" @click.prevent="shareLesson" title="به اشتراک‌گذاری" class="action-icon">
+                              <span class="icon is-medium">
+                                  <i class="fas fa-share-alt"></i>
+                              </span>
+                          </a>
+                      </div>
+                  </div>
+
+                  <!-- متن اصلی درس -->
+                  <div v-if="activeLesson && activeLesson.long_description" v-html="activeLesson.long_description"></div>
+                
                 </template>
 
                 <template v-else>
                   <h2>Introduction</h2>
+                  <div v-if="course.long_description" v-html="course.long_description"></div>
+                  <div v-else-if="course.short_description">{{ course.short_description }}</div>
+                  <div v-else>No description available.</div>
                 </template>
 
-                <div v-if="activeLesson && activeLesson.long_description" v-html="activeLesson.long_description"></div>
-                <div v-else-if="course.long_description" v-html="course.long_description"></div>
-                <div v-else-if="course.short_description">{{ course.short_description }}</div>
-                <div v-else>No description available.</div>
-
                 <hr />
-
+                <!-- ادامه محتوای درس (Quiz, Video, Comments) -->
                 <template v-if="activeLesson">
+
                   <template v-if="activeLesson.lesson_type === 'quiz'">
                     <div v-if="quizQuestions && quizQuestions.length > 0 && activeLesson" class="mt-6">
                       <h3 class="title is-3 has-text-info">تست درک مطلب</h3>
@@ -131,6 +162,7 @@
                   </template>
 
                 </template>
+                <!-- پایان محتوای درس -->
 
               </div>
 
@@ -161,6 +193,7 @@ import CourseComment from '@/components/CourseComment.vue';
 import AddComment from '@/components/AddComment.vue';
 import Quiz from '@/components/Quiz.vue';
 import Video from '@/components/Video.vue';
+import hljs from 'highlight.js';
 
 export default {
   components: {
@@ -235,10 +268,14 @@ export default {
       this.loading = false
       return
     }
-
+    
     try {
       const resp = await axios.get(`courses/${slug}/`)
       console.log('course fetch', resp.data)
+
+      this.$nextTick(() => {
+        hljs.highlightAll(); 
+      });
 
       if (resp.data && resp.data.course) {
         this.course = resp.data.course
@@ -349,6 +386,33 @@ export default {
         })
     },
 
+    shareLesson() {
+        const shareData = {
+            title: this.activeLesson.title + ' | ' + this.course.title,
+            text: `درس جذاب ${this.activeLesson.title} از دوره ${this.course.title} را در LearnwithAdel ببین!`,
+            url: window.location.href,
+        };
+
+        if (navigator.share) {
+            navigator.share(shareData)
+                .then(() => console.log('محتوا با موفقیت به اشتراک گذاشته شد.'))
+                .catch((error) => console.error('خطا در اشتراک گذاری:', error));
+        } else {
+            const tempInput = document.createElement('input');
+            tempInput.value = shareData.url;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                alert('لینک درس در حافظه کپی شد!');
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+            }
+            document.body.removeChild(tempInput);
+        }
+    },
+
 
     getQuiz() {
       if (!this.course || !this.activeLesson) return
@@ -356,7 +420,6 @@ export default {
         .get (`courses/${this.course.slug}/lessons/${this.activeLesson.slug}/get-quiz/`)
         .then(response => {
             console.log("Quiz Loaded:", response.data)
-            // با فرض اینکه بک‌اند اصلاح شده و یک آرایه برمی‌گرداند.
             this.quizQuestions = Array.isArray(response.data) ? response.data : (response.data ? [response.data] : [])
         })
         .catch(error => {
@@ -369,7 +432,6 @@ export default {
       if (isCorrect) {
         this.score++; 
       }
-      // اجبار به رفرش کامپوننت Quiz با تغییر key
       this.currentQuestionIndex++; 
     },
 
@@ -411,6 +473,29 @@ export default {
 </script>
 
 <style>
+.action-icon {
+    color: #485fc7;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 50%;
+    width: 36px; 
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.5rem;
+}
+
+.action-icon:hover {
+    color: #fff; 
+    background-color: #9400d3;
+    box-shadow: 0 4px 8px rgba(148, 0, 211, 0.4);
+}
+
+.action-icon .icon {
+  line-height: 1;
+}
+
+
 @import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css');
 
 .content pre {

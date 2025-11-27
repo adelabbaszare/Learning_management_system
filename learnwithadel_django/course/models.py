@@ -101,7 +101,7 @@ class Comment(models.Model):
 
 class Quiz(models.Model):
     lesson = models.ForeignKey(Lesson, related_name='quizzes', on_delete=models.CASCADE)
-    question = models.CharField(max_length=200, null=True)
+    question = RichTextUploadingField(blank=True, null=True)
     answer = models.CharField(max_length=200, null=True)
     op1 = models.CharField(max_length=200, null=True)
     op2 = models.CharField(max_length=200, null=True)
