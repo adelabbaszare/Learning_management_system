@@ -273,10 +273,6 @@ export default {
       const resp = await axios.get(`courses/${slug}/`)
       console.log('course fetch', resp.data)
 
-      this.$nextTick(() => {
-        hljs.highlightAll(); 
-      });
-
       if (resp.data && resp.data.course) {
         this.course = resp.data.course
         this.lessons = resp.data.lesson || []
@@ -294,6 +290,9 @@ export default {
           this.fetchLessonData(this.activeLesson)
       }
 
+      this.$nextTick(() => {
+        hljs.highlightAll(); 
+      });
 
       document.title = this.course.title + ' | LearnwithAdel'
 
@@ -337,6 +336,10 @@ export default {
       history.pushState({}, null, `#${lesson.slug}`)
 
       this.fetchLessonData(lesson)
+
+      this.$nextTick(() => {
+        hljs.highlightAll(); 
+      });
     },
 
     // متد جدید برای فراخوانی داده‌های مربوط به درس
