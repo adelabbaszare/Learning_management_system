@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Category, Course, Lesson, Comment, Quiz
+from django.utils.safestring import mark_safe
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -48,7 +49,7 @@ class CourseAdmin(admin.ModelAdmin):
 
 
 class QuizAdmin(admin.ModelAdmin):
-    list_display = ('question', 'get_lesson_title', 'get_course_title', 'answer', 'op1', 'op2', 'op3')
+    list_display = ('display_question', 'get_lesson_title', 'get_course_title')
     search_fields = ('question', 'answer')
     list_filter = ('lesson__course__title', 'lesson__title')
 
@@ -59,6 +60,12 @@ class QuizAdmin(admin.ModelAdmin):
     def get_course_title(self, obj):
         return obj.lesson.course.title
     get_course_title.short_description = 'Course' 
+
+    def display_question(self, obj):
+        return mark_safe(obj.question)
+    
+    display_question.short_description = 'Question'
+    display_question.allow_tags = True
 
 
 class CommentAdmin(admin.ModelAdmin):
