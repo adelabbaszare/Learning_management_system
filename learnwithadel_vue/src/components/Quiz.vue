@@ -2,7 +2,7 @@
     <div class="card mb-5">
         <header class="card-header">
             <p class="card-header-title is-size-4">
-                {{ quiz.question }}
+                سوال {{ questionIndex + 1 }} از {{ totalQuestions }}: {{ quiz.question }}
             </p>
         </header>
 
@@ -60,7 +60,8 @@
                 v-if="submitted" 
                 @click.prevent="nextQuestion"
             >
-                سوال بعدی &larr;
+                <!-- متن دکمه بسته به اینکه سوال بعدی وجود دارد یا خیر تغییر می‌کند -->
+                {{ (questionIndex + 1) < totalQuestions ? 'سوال بعدی ←' : 'مشاهده نتایج' }}
             </a>
         </footer>
     </div>
@@ -72,14 +73,34 @@ export default {
         quiz: {
             type: Object,
             required: true
+        },
+        questionIndex: { // جدید: برای نمایش شماره سوال
+            type: Number,
+            required: true
+        },
+        totalQuestions: { // جدید: برای نمایش تعداد کل سوالات
+            type: Number,
+            required: true
         }
     },
     data() {
         return {
             selectedAnswer: '',
-            submitted: false,       
-            quizResult: null,     
-            submitAttempted: false  
+            submitted: false,      
+            quizResult: null,    
+            submitAttempted: false 
+        }
+    },
+    watch: {
+        // ریست کردن وضعیت کوییز هنگام تغییر سوال
+        quiz: {
+            handler() {
+                this.selectedAnswer = '';
+                this.submitted = false;
+                this.quizResult = null;
+                this.submitAttempted = false;
+            },
+            deep: true
         }
     },
     methods: {
@@ -91,12 +112,10 @@ export default {
             }
 
             this.submitted = true;
-
-            if (this.selectedAnswer === this.quiz.answer) {
-                this.quizResult = 'correct';
-            } else {
-                this.quizResult = 'incorrect';
-            }
+            
+            // چک کردن پاسخ
+            const isCorrect = this.selectedAnswer === this.quiz.answer;
+            this.quizResult = isCorrect ? 'correct' : 'incorrect';
         },
         
         getOptionClass(option) {
@@ -119,9 +138,11 @@ export default {
         },
 
         nextQuestion() {
+            // ارسال نتیجه (درست یا غلط بودن) به کامپوننت والد
+            const isCorrect = this.quizResult === 'correct';
+            this.$emit('next', isCorrect);
 
-            this.$emit('next', this.quizResult === 'correct');
-
+            // ریست کردن وضعیت در کامپوننت والد انجام می‌شود
             this.selectedAnswer = '';
             this.submitted = false;
             this.quizResult = null;
@@ -172,13 +193,24 @@ export default {
     border: 1.5px solid #ffffff;
 }
 
-.has-text-success {
+.correct-answer-style {
     border: 2px solid #48c78e;
     background-color: #f6fdf9;
 }
 
-.has-text-danger {
+.incorrect-answer-style {
     border: 2px solid #f14668;
     background-color: #fff5f7;
+}
+
+/* اصلاح استایل‌های Bulma برای وضوح بیشتر */
+.has-text-success.has-text-weight-bold {
+    /* از کلاس‌های Bulma برای تغییر رنگ متن در اینجا جلوگیری می‌شود
+       و از کلاس‌های سفارشی استفاده می‌شود تا استایل صحیح اعمال شود */
+}
+
+.has-text-danger {
+    /* از کلاس‌های Bulma برای تغییر رنگ متن در اینجا جلوگیری می‌شود
+       و از کلاس‌های سفارشی استفاده می‌شود تا استایل صحیح اعمال شود */
 }
 </style>

@@ -99,9 +99,14 @@ def create_course(request):
 
 @api_view(['GET'])
 def get_quiz(request, course_slug, lesson_slug):
-    lesson = Lesson.objects.get(slug=lesson_slug)
-    quiz = lesson.quizzes.first()
-    serializer = QuizSerializer(quiz)
+    try:
+        lesson = Lesson.objects.get(slug=lesson_slug)
+    except Lesson.DoesNotExist:
+        return Response({"detail": "Lesson not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+    questions = lesson.quizzes.all() 
+    serializer = QuizSerializer(questions, many=True)
+    
     return Response(serializer.data)
 
 

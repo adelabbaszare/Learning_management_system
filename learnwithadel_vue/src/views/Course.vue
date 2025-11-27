@@ -20,8 +20,24 @@
           <div class="column is-2">
             <h2>Table of Content</h2>
             <ul>
-              <li v-for="lesson in lessons" :key="lesson.id">
-                <a href="#" @click.prevent="setActiveLesson(lesson)">{{ lesson.title }}</a>
+              <!-- استفاده از sortedLessons به جای lessons برای اعمال ترتیب جدید -->
+              <li v-for="lesson in sortedLessons" :key="lesson.id">
+                <a href="#" @click.prevent="setActiveLesson(lesson)">
+                  
+                  <!-- منطق نمایش آیکون بر اساس lesson_type -->
+                  <span v-if="lesson.lesson_type === 'article'" class="icon is-small has-text-info mr-2">
+                    <i class="fas fa-book-open"></i> 
+                  </span>
+                  <span v-else-if="lesson.lesson_type === 'quiz'" class="icon is-small has-text-warning mr-2">
+                    <i class="fas fa-question-circle"></i>
+                  </span>
+                  <span v-else-if="lesson.lesson_type === 'video'" class="icon is-small has-text-danger mr-2">
+                    <i class="fas fa-video"></i>
+                  </span>
+                  
+                  {{ lesson.title }}
+                  
+                </a>
               </li>
             </ul>
           </div>
@@ -61,14 +77,45 @@
 
                 <template v-if="activeLesson">
                   <template v-if="activeLesson.lesson_type === 'quiz'">
-                    <Quiz :quiz="quiz" />
+                    <div v-if="quizQuestions && quizQuestions.length > 0 && activeLesson" class="mt-6">
+                      <h3 class="title is-3 has-text-info">تست درک مطلب</h3>
+                      <!-- استفاده از key برای اجبار به ری‌رندر شدن کامپوننت Quiz برای سوال جدید -->
+                      <Quiz
+                          v-if="currentQuestionIndex < quizQuestions.length"
+                          :key="currentQuestionIndex" 
+                          :quiz="quizQuestions[currentQuestionIndex]"
+                          :question-index="currentQuestionIndex"
+                          :total-questions="quizQuestions.length"
+                          @next="handleNextQuestion"
+                      />
+                      <!-- نمایش نتیجه نهایی کوییز -->
+                      <div v-else class="box notification is-primary has-text-centered p-6">
+                          <p class="title is-2 mb-4">نتایج کوییز</p>
+                          <p class="subtitle is-4">
+                              شما به **{{ score }}** سوال از **{{ quizQuestions.length }}** سوال پاسخ صحیح دادید.
+                          </p>
+                          <progress 
+                              class="progress is-large" 
+                              :class="score >= quizQuestions.length / 2 ? 'is-success' : 'is-danger'"
+                              :value="score" 
+                              :max="quizQuestions.length">
+                          </progress>
+                          <p class="mt-4 is-size-5 has-text-weight-semibold">
+                              درصد موفقیت: {{ Math.round((score / quizQuestions.length) * 100) }}%
+                          </p>
+                          <button class="button is-link is-light mt-5" @click="startQuizAgain">
+                              شروع مجدد کوییز
+                          </button>
+                      </div>
+                    </div>
                   </template>
 
                   <template v-if="activeLesson.lesson_type === 'video'">
                     <Video :youtube_id="activeLesson.youtube_id" />
                   </template>
 
-                  <template v-if="activeLesson.lesson_type === 'article'">
+                  <template v-if="activeLesson.lesson_type === 'article' || activeLesson.lesson_type === 'video'">
+                    <!-- اضافه کردن بخش کامنت‌ها فقط برای درس‌های Article و Video -->
                     <CourseComment
                       v-for="comment in comments"
                       :key="comment.id"
@@ -77,9 +124,12 @@
                     <AddComment
                       :course="course"
                       :activeLesson="activeLesson"
-                      :isAuthenticated="isAuthenticated"   :currentUser="currentUser"         @submitComment="submitComment"
+                      :isAuthenticated="isAuthenticated" 
+                      :currentUser="currentUser"  
+                      @submitComment="submitComment"
                     />
                   </template>
+
                 </template>
 
               </div>
@@ -93,13 +143,13 @@
               </div>
             </div>
 
-          <div v-else>
-            <p>No course data available.</p>
+            <div v-else>
+              <p>No course data available.</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
   </div>
 </template>
@@ -131,7 +181,10 @@ export default {
       activeLesson: null,
       loading: false,
       error: null,
-      quiz: {},
+      
+      quizQuestions: [],
+      currentQuestionIndex: 0,
+      score: 0,
       activity: {}
     }
   },
@@ -141,6 +194,34 @@ export default {
     },
     currentUser() {
     return this.$store?.state?.user || {} 
+    },
+    // New computed property to sort lessons by type: article -> quiz -> video
+    sortedLessons() {
+      // 1. ایجاد یک کپی از آرایه lessons برای جلوگیری از تغییر مستقیم وضعیت
+      const lessonsCopy = [...this.lessons];
+      
+      // 2. تعریف تابع مقایسه‌ای برای مرتب‌سازی
+      const getLessonTypeOrder = (type) => {
+        if (type === 'article') return 1;
+        if (type === 'quiz') return 2;
+        if (type === 'video') return 3;
+        return 99; // برای انواع نامشخص
+      };
+
+      // 3. مرتب‌سازی بر اساس نوع و سپس بر اساس ترتیب اصلی (Index)
+      return lessonsCopy.sort((a, b) => {
+        const orderA = getLessonTypeOrder(a.lesson_type);
+        const orderB = getLessonTypeOrder(b.lesson_type);
+
+        if (orderA !== orderB) {
+          // اگر نوع درس‌ها متفاوت است، بر اساس نوع مرتب کن
+          return orderA - orderB;
+        } else {
+          // اگر نوع درس‌ها یکسان است، بر اساس id یا ترتیب اصلی (a.id - b.id) مرتب کن
+          // در اینجا فرض می‌کنیم که idها ترتیب اصلی ایجاد را حفظ می‌کنند.
+          return a.id - b.id;
+        }
+      });
     }
   },
 
@@ -164,14 +245,18 @@ export default {
         this.lessons = resp.data.lesson || []
       } else {
         this.course = resp.data
-        this.lessons = resp.data.lessons || resp.data.lesson || []
+        // تضمین می‌کنیم که lessons به عنوان آرایه‌ای از آبجکت‌های درس ذخیره شود.
+        this.lessons = (Array.isArray(resp.data.lessons) ? resp.data.lessons : resp.data.lesson) || []
       }
 
-      this.activeLesson = (this.lessons && this.lessons.length) ? this.lessons[0] : null
-
-      if (this.activeLesson && this.activeLesson.lesson_type === 'article') {
-          this.getComments() 
+      // تنظیم اولین درس فعال به عنوان اولین درس مرتب‌شده (اگر وجود داشته باشد)
+      this.activeLesson = (this.sortedLessons && this.sortedLessons.length) ? this.sortedLessons[0] : null
+      
+      // فراخوانی داده‌های درس اولیه
+      if (this.activeLesson) {
+          this.fetchLessonData(this.activeLesson)
       }
+
 
       document.title = this.course.title + ' | LearnwithAdel'
 
@@ -201,35 +286,45 @@ export default {
       this.comments.push(comment)
     },
 
-
     setActiveLesson(lesson) {
       this.activeLesson = lesson
       console.log('setActiveLesson ->', lesson)
 
-      // Reset
-      this.quizResult = null
-      this.selectedAnswer = ''
-      this.quiz = {} // Delete Previous Quiz
-      this.comments = [] // Delete Previous Comments
+      // Reset all lesson-specific data
+      this.comments = [] 
+      this.quizQuestions = [] 
+      this.currentQuestionIndex = 0
+      this.score = 0
+      this.activity = {}
 
-      if (lesson.lesson_type === 'quiz') {  
-        this.getQuiz()
-      } else {
-      // get comments for the selected lesson and article type, not quiz
-      this.getComments()
-      }
+      history.pushState({}, null, `#${lesson.slug}`)
 
-      this.trackSatrted()
+      this.fetchLessonData(lesson)
+    },
+
+    // متد جدید برای فراخوانی داده‌های مربوط به درس
+    fetchLessonData(lesson) {
+        // فراخوانی داده‌های وابسته به نوع درس
+        if (lesson.lesson_type === 'quiz') {  
+            this.getQuiz()
+        } else if (lesson.lesson_type === 'article' || lesson.lesson_type === 'video') {
+            this.getComments()
+        }
+        
+        // Track started for all lesson types
+        this.trackSatrted()
     },
 
 
     trackSatrted() {
+      if (!this.activeLesson) return 
+      
       const token = localStorage.getItem('token')
       const headers = {}
       if (token) headers['Authorization'] = 'Token ' + token
 
       axios
-        .post(`activities/track_started/${this.$route.params.slug}/lessons/${this.activeLesson.slug}/`)
+        .post(`activities/track_started/${this.$route.params.slug}/lessons/${this.activeLesson.slug}/`, null, { headers })
         .then(response => {
           console.log(response.data)
 
@@ -239,12 +334,14 @@ export default {
     
 
     markAsDone() {
+      if (!this.activeLesson) return 
+
       const token = localStorage.getItem('token')
       const headers = {}
       if (token) headers['Authorization'] = 'Token ' + token
       
       axios
-        .post(`activities/mark_as_done/${this.$route.params.slug}/lessons/${this.activeLesson.slug}/`)
+        .post(`activities/mark_as_done/${this.$route.params.slug}/lessons/${this.activeLesson.slug}/`, null, { headers })
         .then(response => {
           console.log(response.data)
 
@@ -254,14 +351,33 @@ export default {
 
 
     getQuiz() {
+      if (!this.course || !this.activeLesson) return
       axios
         .get (`courses/${this.course.slug}/lessons/${this.activeLesson.slug}/get-quiz/`)
         .then(response => {
-          console.log(response.data)
-
-          this.quiz = response.data
+            console.log("Quiz Loaded:", response.data)
+            // با فرض اینکه بک‌اند اصلاح شده و یک آرایه برمی‌گرداند.
+            this.quizQuestions = Array.isArray(response.data) ? response.data : (response.data ? [response.data] : [])
+        })
+        .catch(error => {
+          console.error('خطا در بارگذاری کوییز:', error)
+          this.quizQuestions = []
         })
     },
+
+    handleNextQuestion(isCorrect) {
+      if (isCorrect) {
+        this.score++; 
+      }
+      // اجبار به رفرش کامپوننت Quiz با تغییر key
+      this.currentQuestionIndex++; 
+    },
+
+    startQuizAgain() {
+      this.currentQuestionIndex = 0;
+      this.score = 0;
+    },
+
 
     getComments() {
       // make sure course and activeLesson are set
