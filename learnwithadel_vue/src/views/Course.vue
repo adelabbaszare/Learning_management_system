@@ -499,7 +499,7 @@ export default {
 }
 
 
-@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css');
+/* @import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css'); */
 
 .content pre {
   padding: 1rem;

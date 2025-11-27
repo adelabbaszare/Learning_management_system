@@ -85,9 +85,9 @@ CKEDITOR_CONFIGS = {
             'justify',          
         ]),
         
-        'codeSnippet_theme': 'monokai',
-        'mathJaxLib': '//[cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML](https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML)', # کتابخانه MathJax
-        'height': 500,
+        'codeSnippet_theme': 'github',
+        'mathJaxLib': '//[cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML](https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML)',
+        'height': 600,
         'width': '100%',
         'filebrowserBrowseUrl': '/ckeditor/browse/', 
         'filebrowserUploadUrl': '/ckeditor/upload/',
