@@ -1,5 +1,14 @@
 # Learning Management System (LMS)
 
+[![Vue.js](https://img.shields.io/badge/Vue.js-3.x-42b883?logo=vue.js&logoColor=white)](https://vuejs.org/)
+[![Bulma](https://img.shields.io/badge/Bulma-1.x-00d1b2?logo=bulma&logoColor=white)](https://bulma.io/)
+[![Django](https://img.shields.io/badge/Django-5.x-092e20?logo=django&logoColor=white)](https://www.djangoproject.com/)
+[![Django REST Framework](https://img.shields.io/badge/DRF-REST_API-a30000?logo=django&logoColor=white)](https://www.django-rest-framework.org/)
+[![Axios](https://img.shields.io/badge/Axios-1.x-5A29E4?logo=axios&logoColor=white)](https://axios-http.com/)
+[![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+
+> **Documentation:** [Read the Persian documentation (README_fa.md)](README_fa.md)
+
 A full-stack learning management system built around a Django REST API and a Vue 3 single-page application. The project provides course publishing, lessons, quizzes, comments, user accounts, instructor profiles, and learner activity tracking.
 
 ## Table of Contents
@@ -32,10 +41,10 @@ The current repository is primarily a development-oriented application. The Djan
 |   Vue 3 Frontend    |                         |   Django REST API       |
 |                     |                         |                         |
 | - Vue Router        |                         | - Accounts              |
-| - Vuex               |                         | - Courses               |
-| - Axios              |                         | - Lessons               |
-| - Bulma              |                         | - Quizzes               |
-| - CKEditor 5         |                         | - Comments              |
+| - Vuex              |                         | - Courses               |
+| - Axios             |                         | - Lessons               |
+| - Bulma             |                         | - Quizzes               |
+| - CKEditor 5        |                         | - Comments              |
 |                     |                         | - Activity tracking     |
 +---------------------+                         +------------+------------+
                                                                |
