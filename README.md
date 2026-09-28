@@ -1,5 +1,6 @@
 # Learning Management System (LMS)
 
+![Learning Management System (LMS)](https://github.com/adelabbaszare/Learning_management_system/blob/main/Learning_management_system.png)
 [![Vue.js](https://img.shields.io/badge/Vue.js-3.x-42b883?logo=vue.js&logoColor=white)](https://vuejs.org/)
 [![Bulma](https://img.shields.io/badge/Bulma-1.x-00d1b2?logo=bulma&logoColor=white)](https://bulma.io/)
 [![Django](https://img.shields.io/badge/Django-5.x-092e20?logo=django&logoColor=white)](https://www.djangoproject.com/)
