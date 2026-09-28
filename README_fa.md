@@ -2,14 +2,6 @@
 
 یک سامانه مدیریت یادگیری Full-Stack که با **Django REST API** در سمت Backend و **Vue 3** در سمت Frontend پیاده‌سازی شده است. این پروژه امکاناتی مانند مدیریت کاربران، دوره‌ها، دسته‌بندی‌ها، درس‌ها، آزمون‌ها، دیدگاه‌ها و پیگیری پیشرفت یادگیری را فراهم می‌کند.
 
-> **Repository:** `adelabbaszare/Learning_management_system`
->
-> **Backend:** Django 5.2.7 + Django REST Framework
->
-> **Frontend:** Vue 3 + Vue Router + Vuex + Bulma
->
-> **Database:** SQLite در تنظیمات فعلی توسعه
-
 ## فهرست مطالب
 
 - [معرفی](#معرفی)
