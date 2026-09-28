@@ -2,14 +2,6 @@
 
 A full-stack learning management system built around a Django REST API and a Vue 3 single-page application. The project provides course publishing, lessons, quizzes, comments, user accounts, instructor profiles, and learner activity tracking.
 
-> **Repository:** `adelabbaszare/Learning_management_system`
->
-> **Backend:** Django 5.2.7 + Django REST Framework
->
-> **Frontend:** Vue 3 + Vue Router + Vuex + Bulma
->
-> **Database:** SQLite (development configuration)
-
 ## Table of Contents
 
 - [Overview](#overview)
