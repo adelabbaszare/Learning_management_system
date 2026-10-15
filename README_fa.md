@@ -417,9 +417,9 @@ http://localhost:8000/api/v1/
 10. بازبینی مجوزهای ایجاد و انتشار Course و نقش Instructor.
 11. اجرای Django deployment checks و استفاده از WSGI/ASGI server و Reverse Proxy مناسب.
 
-## License
+## مجوز
 
-در Repository فعلی License متن‌باز مشخصی ثبت نشده است. بنابراین تا زمان افزودن License، نباید فرض شود که کد اجازه استفاده یا بازنشر آزاد دارد.
+این پروژه تحت مجوز MIT منتشر شده است.
 
 ## مستندات مرتبط
 
