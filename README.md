@@ -435,7 +435,7 @@ This repository is configured for development rather than production. Before dep
 
 ## License
 
-No explicit open-source license is currently documented in the repository. Until a license is added, treat the source code as **all rights reserved** and do not assume permission to redistribute or reuse it.
+This project is licensed under the MIT License.
 
 ## Related Documentation
 
