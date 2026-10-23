@@ -282,8 +282,6 @@ Recommended development environment:
 - Node.js 18+ and npm
 - Git
 
-The repository does not currently provide a backend `requirements.txt` or other Python dependency lock file, so the backend dependencies need to be installed explicitly.
-
 ### 1. Clone the repository
 
 ```bash
@@ -293,25 +291,33 @@ cd Learning_management_system
 
 ### 2. Set up the Django backend
 
-On Windows CMD:
+Create and activate a virtual environment:
+
+**Windows CMD:**
 
 ```cmd
 cd learnwithadel_django
 python -m venv .venv
 .venv\Scripts\activate
 python -m pip install --upgrade pip
-pip install Django==5.2.7 djangorestframework django-cors-headers djoser django-ckeditor Pillow djangorestframework-simplejwt
 ```
 
-On macOS/Linux:
+**macOS/Linux:**
 
 ```bash
 cd learnwithadel_django
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-pip install Django==5.2.7 djangorestframework django-cors-headers djoser django-ckeditor Pillow djangorestframework-simplejwt
 ```
+
+Install the backend dependencies from the project requirements file:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+The backend dependencies are maintained in `learnwithadel_django/requirements.txt`. The file pins the core Django/DRF stack and runtime packages used by the project.
 
 Apply migrations:
 
@@ -347,6 +353,8 @@ npm install
 npm run serve
 ```
 
+The frontend dependencies are defined in `learnwithadel_vue/package.json` and locked by `learnwithadel_vue/package-lock.json`.
+
 Vue CLI will print the local development URL in the terminal, commonly `http://localhost:8080/`.
 
 ### 4. Run both applications
@@ -359,6 +367,8 @@ Terminal 2 → Vue SPA    → http://localhost:8080/
 ```
 
 The current Django CORS configuration explicitly allows `http://localhost:8081`, while the Vue CLI commonly uses port `8080`. If the frontend is served on a different port, update `CORS_ALLOWED_ORIGINS` in `settings.py` to match the actual frontend origin.
+
+
 
 ## Typical Workflow
 
