@@ -268,36 +268,42 @@ Base path: `/api/v1/activities/`
 - Node.js 18+ و npm
 - Git
 
-در حال حاضر Repository فایل `requirements.txt` یا فایل Lock برای وابستگی‌های Python ندارد؛ بنابراین وابستگی‌های Backend باید به‌صورت دستی نصب شوند.
-
-### 1. Clone
+### ۱. دریافت Repository
 
 ```bash
 git clone https://github.com/adelabbaszare/Learning_management_system.git
 cd Learning_management_system
 ```
 
-### 2. راه‌اندازی Django
+### ۲. راه‌اندازی Backend با Django
 
-در Windows CMD:
+ساخت و فعال‌سازی محیط مجازی:
+
+**Windows CMD:**
 
 ```cmd
 cd learnwithadel_django
 python -m venv .venv
 .venv\Scripts\activate
 python -m pip install --upgrade pip
-pip install Django==5.2.7 djangorestframework django-cors-headers djoser django-ckeditor Pillow djangorestframework-simplejwt
 ```
 
-در macOS/Linux:
+**macOS/Linux:**
 
 ```bash
 cd learnwithadel_django
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-pip install Django==5.2.7 djangorestframework django-cors-headers djoser django-ckeditor Pillow djangorestframework-simplejwt
 ```
+
+نصب وابستگی‌های Backend از فایل requirements:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+وابستگی‌های Backend در فایل `learnwithadel_django/requirements.txt` نگهداری می‌شوند و نسخه‌های اصلی Django/DRF و پکیج‌های مورد استفاده پروژه را مشخص می‌کنند.
 
 اجرای Migrationها:
 
@@ -317,13 +323,13 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-API در حالت پیش‌فرض در آدرس زیر قابل دسترسی خواهد بود:
+API در حالت پیش‌فرض در آدرس زیر در دسترس خواهد بود:
 
 ```text
 http://127.0.0.1:8000/
 ```
 
-### 3. راه‌اندازی Vue
+### ۳. راه‌اندازی Frontend با Vue
 
 در یک Terminal جدید:
 
@@ -333,16 +339,26 @@ npm install
 npm run serve
 ```
 
-Vue CLI آدرس اجرای Frontend را در Terminal نمایش می‌دهد؛ معمولاً `http://localhost:8080/` است.
+وابستگی‌های Frontend در فایل `learnwithadel_vue/package.json` تعریف شده و نسخه‌های نصب‌شده توسط `learnwithadel_vue/package-lock.json` قفل می‌شوند.
 
-### 4. اجرای هم‌زمان
+Vue CLI آدرس اجرای Frontend را در Terminal نمایش می‌دهد؛ معمولاً:
+
+```text
+http://localhost:8080/
+```
+
+### ۴. اجرای هم‌زمان Backend و Frontend
+
+برای توسعه محلی، هر دو پردازش را هم‌زمان اجرا کنید:
 
 ```text
 Terminal 1 → Django API → http://127.0.0.1:8000/
 Terminal 2 → Vue SPA    → http://localhost:8080/
 ```
 
-در تنظیمات فعلی Django، مقدار `CORS_ALLOWED_ORIGINS` شامل `http://localhost:8081` است، در حالی که Vue CLI معمولاً روی پورت `8080` اجرا می‌شود. در صورت اجرای Frontend روی پورت دیگر، مقدار CORS را متناسب با Origin واقعی Frontend تنظیم کنید.
+در تنظیمات فعلی Django، مقدار `CORS_ALLOWED_ORIGINS` شامل `http://localhost:8081` است، در حالی که Vue CLI معمولاً روی پورت `8080` اجرا می‌شود. در صورت اجرای Frontend روی پورت دیگر، مقدار `CORS_ALLOWED_ORIGINS` در `settings.py` را مطابق Origin واقعی Frontend تنظیم کنید.
+
+
 
 ## روند استفاده
 
