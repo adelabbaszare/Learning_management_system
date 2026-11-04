@@ -38,9 +38,6 @@ jobs:
           cache: npm
           cache-dependency-path: learnwithadel_vue/package-lock.json
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-
       - name: Install frontend dependencies
         working-directory: learnwithadel_vue
         run: npm ci
