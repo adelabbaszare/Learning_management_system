@@ -1,42 +1,44 @@
 <template>
-  <Nav/>
-  <router-view/>
-  <Footer/>
+  <Nav />
+  <router-view />
+  <Footer />
 </template>
 
 <script>
-import axios from 'axios';
-import Footer from './components/Footer.vue';
-import Nav from '@/components/Nav.vue';
-import './assets/custom-bulma.scss';
+import axios from 'axios'
+import Footer from './components/Footer.vue'
+import Nav from '@/components/Nav.vue'
+import './assets/custom-bulma.scss'
 
-axios.defaults.baseURL = 'http://localhost:8000/api/v1/'
 export default {
   name: 'App',
   components: { Nav, Footer },
   created() {
+    const configuredApiUrl = (process.env.VUE_APP_API_URL || '').trim()
+    const useInsecureApiInProduction =
+      process.env.NODE_ENV === 'production' && /^http:\/\//i.test(configuredApiUrl)
 
-    const apiUrl = process.env.VUE_APP_API_URL || 'http://localhost:8000/api/v1/';
+    // GitHub Pages is HTTPS-only. Never ship an HTTP API endpoint in production.
+    const apiUrl = configuredApiUrl && !useInsecureApiInProduction
+      ? configuredApiUrl
+      : '/api/v1/'
 
-    axios.defaults.baseURL = apiUrl;
+    axios.defaults.baseURL = apiUrl.endsWith('/') ? apiUrl : `${apiUrl}/`
 
-    this.$store.commit('initializeStore');
+    this.$store.commit('initializeStore')
 
-    const token = this.$store.state.user.token;
+    const token = this.$store.state.user.token
     if (token) {
-      axios.defaults.headers.common['Authorization'] = 'Token ' + token;
+      axios.defaults.headers.common.Authorization = 'Token ' + token
     } else {
-
-      delete axios.defaults.headers.common['Authorization'];
+      delete axios.defaults.headers.common.Authorization
     }
   }
 }
 </script>
 
-
 <style lang="scss">
 @import '../node_modules/bulma';
-//@import '../src/assets/custom-bulma.scss';
 
 @keyframes heartbeat {
   0%, 20%, 40%, 60%, 80%, 100% {
@@ -59,20 +61,14 @@ export default {
 }
 
 body {
-    /* مثال ۱: رنگ ثابت */
-    background-color: #000000;
-    
-    /* مثال ۲: گرادیانت ملایم */
-    background-image: linear-gradient(180deg, #1a1a1a28 75%, #5e007384 100vh);
-    
-    /* مثال ۳: تصویر پس‌زمینه */
-    /*background-image: url('https://img.freepik.com/free-vector/abstract-perspective-grid-lines-black-background_1017-47349.jpg?semt=ais_incoming&w=740&q=80');*/
-    background-size: cover;          
-    background-position: center center;
-    background-attachment: fixed;    
-    background-repeat: no-repeat;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-  }
-  </style>
+  background-color: #000000;
+  background-image: linear-gradient(180deg, #1a1a1a28 75%, #5e007384 100vh);
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+</style>

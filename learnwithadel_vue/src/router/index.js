@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/Home.vue'
 import About from '../views/About.vue'
 import SignUp from '@/views/SignUp.vue'
@@ -58,8 +58,12 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+  // Hash history keeps nested Vue routes working on static GitHub Pages hosting.
+  history: createWebHashHistory(process.env.BASE_URL),
+  routes,
+  scrollBehavior() {
+    return { top: 0 }
+  }
 })
 
 export default router
